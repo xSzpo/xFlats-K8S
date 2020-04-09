@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-config
+data:
+  GCP_FIRESTORE_COLLECTION: 'flats'
+  GCP_FIRESTORE_SECRETS_PATH: "/etc/gcpfirestore/gcpfirestore_key.json"
+  JSONLINE_FILE_DIR: "/app/data/"
+  JSONLINE_FILE_NAME: "flats_otodom_"
+  JSONLINE_ADDDATE2NAME: "True"
+  REDIS_HOST: "localhost"
+  REDIS_PORT: "6379"
+  SCRAPER_START_DELAY_SEC: "30"
+  SCRAPER_DELAY_AFTER_EACH_RUN_SEC: "60"
+  scr_pipe_ProcessItem: "100"
+  scr_pipe_CheckIfExistRedis: "110"
+  scr_pipe_CheckIfExistGCPFirestore: "None"
+  scr_pipe_OutputFilter: "130"
+  scr_pipe_ProcessItemGeocode: "140"
+  scr_pipe_ValidSchema: "150"
+  scr_pipe_OrderbySchema: "160"
+  scr_pipe_OutputLocal: "170"
+  scr_pipe_OutputGCPFirestore: "None"
+  scr_pipe_OutputRedis: "190"
+  scr_pipe_OutputStdout: "None"
