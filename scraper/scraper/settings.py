@@ -30,6 +30,64 @@ DOWNLOAD_DELAY = 0.5
 LOGSTATS_INTERVAL = 0
 CRAWL_LIST_PAGES = 999  # how many pages with links ]to crawl (start pages)
 
+
+###################
+# PRODUCER SETTINGS
+###################
+
+BOT_NAME = 'otodom'
+
+#################
+# OUTPUT SETTINGS
+#################
+
+# SELECT WHERE TO CHECK
+SOURCE = 'LOCAL'
+
+ID_FIELD = '_id'
+DOWNLOAD_DATE = 'download_date'
+
+# REDIS
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB_INDEX = 0
+
+# S3
+BUCKET_NAME = 'mojewiadroxszpo'
+
+# GCP Firestore
+COLLECTION = 'flats'
+SECRETS_PATH = "/Users/xszpo/GoogleDrive/01_Projects/202003_xFlats_K8S/secrets/gcpfirestore_key.json"
+FIRESTORE_KEYS_MOVE_2_MORE = ['body']
+FIRESTORE_STR2DATE = ['download_date', 'date_created', 'date_modified']
+
+# local
+
+LOCAL_FILE_DIR = "/Users/xszpo/GoogleDrive/01_Projects/202003_xFlats_K8S/scraper/data/"
+LOCAL_FILE_NAME = "data_nok8s"
+ADDDATE2NAME = True
+
+# schema
+SCHEMA_FILE_NAME = 'schema.json'
+
+##########
+# PIELINES
+##########
+
+ITEM_PIPELINES = {
+    'scraper.pipelines.ProcessItem': 100,
+    'scraper.pipelines.CheckIfExistRedis': None,
+    'scraper.pipelines.CheckIfExistGCPFirestore': None,
+    'scraper.pipelines.OutputFilter': 130,
+    'scraper.pipelines.ProcessItemGeocode': 140,
+    'scraper.pipelines.ValidSchema': 150,
+    'scraper.pipelines.OrderbySchema': 160,
+    'scraper.pipelines.OutputLocal': 170,
+    'scraper.pipelines.OutputGCPFirestore': None,
+    'scraper.pipelines.OutputRedis': None,
+    'scraper.pipelines.OutputStdout': None
+}
+
 # -----------------------------------------------------------------------------
 # USER AGENT
 # -----------------------------------------------------------------------------
@@ -66,60 +124,3 @@ USER_AGENTS = [
      'Chrome/63.0.3239.108 '
      'Safari/537.36'),  # chrome
 ]
-
-###################
-# PRODUCER SETTINGS
-###################
-
-BOT_NAME = 'otodom'
-
-#################
-# OUTPUT SETTINGS
-#################
-
-# SELECT WHERE TO CHECK
-SOURCE = 'LOCAL'
-
-ID_FIELD = '_id'
-DOWNLOAD_DATE = 'download_date'
-
-# REDIS
-REDIS_HOST = 'localhost'
-REDIS_PORT = 6379
-REDIS_DB_INDEX = 0
-
-# S3
-BUCKET_NAME = 'mojewiadroxszpo'
-
-# GCP Firestore
-COLLECTION = 'flats'
-SECRETS_PATH = "/Users/xszpo/GoogleDrive/01_Projects/201907_xFlats/secrets/gcpfirestore_key.json"
-FIRESTORE_KEYS_MOVE_2_MORE = ['body']
-FIRESTORE_STR2DATE = ['download_date', 'date_created', 'date_modified']
-
-# local
-
-LOCAL_FILE_DIR = "/Users/xszpo/GoogleDrive/01_Projects/201907_xFlats/scraper/data/"
-LOCAL_FILE_NAME = "data_nok8s_"
-ADDDATE2NAME = True
-
-# schema
-SCHEMA_FILE_NAME = 'schema.json'
-
-##########
-# PIELINES
-##########
-
-ITEM_PIPELINES = {
-    'scraper.pipelines.ProcessItem': 100,
-    #'scraper.pipelines.CheckIfExistRedis': 110,
-    'scraper.pipelines.CheckIfExistGCPFirestore': 120,
-    'scraper.pipelines.OutputFilter': 130,
-    'scraper.pipelines.ProcessItemGeocode': 140,
-    'scraper.pipelines.ValidSchema': 150,
-    'scraper.pipelines.OrderbySchema': 160,
-    'scraper.pipelines.OutputLocal': 170,
-    'scraper.pipelines.OutputGCPFirestore': 180,
-    #'scraper.pipelines.OutputRedis': 190,
-    #'scraper.pipelines.OutputStdout': 200
-}

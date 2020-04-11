@@ -169,11 +169,14 @@ class Scraper:
 
     @staticmethod
     def searchregex(txt, pattern, group=0, func=None):
-        match = re.search(pattern, txt)
-        if match and func:
-            return func(match.group(group))
-        elif match:
-            return match.group(group)
+        if txt:
+            match = re.search(pattern, txt)
+            if match and func:
+                return func(match.group(group))
+            elif match:
+                return match.group(group)
+            else:
+                return None
         else:
             return None
 
@@ -183,34 +186,43 @@ class Geodata:
     @staticmethod
     def get_geodata_otodom(content):
 
-        list_geo = re.findall('geo..\{(.*?)\}', content.decode("utf-8"))
-        text = [row for row in list_geo if Scraper.contains_digit(row)][0]
-        text = text.replace('"', '')
-        geocoordinates = dict([i.split(":") for i in text.split(",")])
-
-        return geocoordinates
+        pattern = 'geo..\{(.*?)\}'
+        if re.search(pattern, content.decode("utf-8")):
+            list_geo = re.findall(pattern, content.decode("utf-8"))
+            text = [row for row in list_geo if Scraper.contains_digit(row)][0]
+            text = text.replace('"', '')
+            geocoordinates = dict([i.split(":") for i in text.split(",")])
+            return geocoordinates
+        else:
+            return dict()
 
     @staticmethod
     def get_geodata_olx(content):
 
-        data_lat = re.findall("data-lat.{2}[\d]{2}.[\d]{8}.", content.decode("utf-8"))[0]
-        data_lat = "".join([i for i in data_lat if i.isdigit() or i == "."])
-        data_lon = re.findall("data-lon.{2}[\d]{2}.[\d]{8}.", content.decode("utf-8"))[0]
-        data_lon = "".join([i for i in data_lon if i.isdigit() or i == "."])
-        geocoordinates = {"latitude": data_lat, "longitude": data_lon}
-
-        return geocoordinates
+        pattern = "data-lat.{2}[\d]{2}.[\d]{8}."
+        if re.search(pattern, content.decode("utf-8")):
+            data_lat = re.findall("data-lat.{2}[\d]{2}.[\d]{8}.", content.decode("utf-8"))[0]
+            data_lat = "".join([i for i in data_lat if i.isdigit() or i == "."])
+            data_lon = re.findall("data-lon.{2}[\d]{2}.[\d]{8}.", content.decode("utf-8"))[0]
+            data_lon = "".join([i for i in data_lon if i.isdigit() or i == "."])
+            geocoordinates = {"latitude": data_lat, "longitude": data_lon}
+            return geocoordinates
+        else:
+            return dict()
 
     @staticmethod
     def get_geodata_gratka(content):
 
-        data_lat = re.findall("szerokosc-geograficzna-y..[\d]{2}\\.[\d]+", content.decode("utf-8"))[0]
-        data_lat = "".join([i for i in data_lat if i.isdigit() or i == "."])
-        data_lon = re.findall("dlugosc-geograficzna-x..[\d]{2}\\.[\d]+", content.decode("utf-8"))[0]
-        data_lon = "".join([i for i in data_lon if i.isdigit() or i == "."])
-        geocoordinates = {"latitude": data_lat, "longitude": data_lon}
-
-        return geocoordinates
+        pattern = "szerokosc-geograficzna-y..[\d]{2}\\.[\d]+"
+        if re.search(pattern, content.decode("utf-8")):
+            data_lat = re.findall("szerokosc-geograficzna-y..[\d]{2}\\.[\d]+", content.decode("utf-8"))[0]
+            data_lat = "".join([i for i in data_lat if i.isdigit() or i == "."])
+            data_lon = re.findall("dlugosc-geograficzna-x..[\d]{2}\\.[\d]+", content.decode("utf-8"))[0]
+            data_lon = "".join([i for i in data_lon if i.isdigit() or i == "."])
+            geocoordinates = {"latitude": data_lat, "longitude": data_lon}
+            return geocoordinates
+        else:
+            return dict()
 
     @staticmethod
     def get_geocode_openstreet(geocoordinates):
@@ -227,4 +239,4 @@ class Geodata:
 
             return geocoordinates, address_text, address_coordin
         except BaseException as e:
-            raise DropItem("Openstreetmap error, " % e)
+            raise DropItem("Openstreetmap error, %s " % e)

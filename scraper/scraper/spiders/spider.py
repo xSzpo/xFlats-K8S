@@ -5,6 +5,7 @@ import logging
 import re
 import zlib
 import base64
+from scrapy.exceptions import DropItem
 from dateutil.parser import parse
 from helpers.base import Scraper
 from helpers.base import Geodata
@@ -215,7 +216,8 @@ class Spider3(scrapy.Spider):
 
         tmp['date_created'] = None
         tmp['date_modified'] = Scraper.searchregex(
-            date_modified, r"20\d\d-[01]\d-\d\d", group=0, func=parse)
+            date_modified, r"\d\d.[01]\d.20\d\d", group=0)
+        tmp['date_modified'] = parse(tmp['date_modified'], dayfirst=True)
 
         tmp['url'] = response.url
         tmp['producer_name'] = self.name
@@ -275,6 +277,7 @@ class Spider4(scrapy.Spider):
             self.article_page_iter_xpaths['name']).getall())
         tmp['location'] = " ".join(response.xpath(
             self.article_page_iter_xpaths['location']).getall())
+
         tmp['geo_coordinates'] = {
             "latitude": tmp['data_lat'], "longitude": tmp['data_lon']}
         tmp['tracking_id'] = re.findall(r"\d+", response.url.split("-")[-1])[0]
