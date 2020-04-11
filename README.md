@@ -1,6 +1,5 @@
-# xFlat
+# xFlat on Kubernetes and GCP [in progress]
 
-In progress - Kubernetes, Google Cloud deployment
 
 **Monitoring and assessment system for flats offers that are put up for sale in Warsaw.**
 
