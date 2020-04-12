@@ -49,6 +49,7 @@ def scraper(event={}, context={}):
         'scraper.pipelines.ProcessItem': env2pipe("SCRAPER_START_DELAY_SEC"),
         'scraper.pipelines.CheckIfExistRedis': env2pipe("scr_pipe_CheckIfExistRedis"),
         'scraper.pipelines.CheckIfExistGCPFirestore': env2pipe("scr_pipe_CheckIfExistGCPFirestore"),
+        'scraper.pipelines.UpdateExistRedis': env2pipe("scr_pipe_UpdateExistRedis"),
         'scraper.pipelines.OutputFilter': env2pipe("scr_pipe_OutputFilter"),
         'scraper.pipelines.ProcessItemGeocode': env2pipe("scr_pipe_ProcessItemGeocode"),
         'scraper.pipelines.ValidSchema': env2pipe("scr_pipe_ValidSchema"),

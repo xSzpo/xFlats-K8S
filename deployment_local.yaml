@@ -1,0 +1,135 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xflats
+  labels:
+    app: xflats
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xflats
+  template:
+    metadata:
+      labels:
+        app: xflats
+    spec:
+      containers:
+      # docker build -t flat_scraper:1.0.0 .
+      - name: scraper-otodom
+        image: flat_scraper:1.0.0
+        env:
+        - name: SCRAPER_CRAWLER_NAME
+          value: 'otodom'
+        - name: JSONLINE_FILE_NAME
+          value: 'flats_otodom'
+        envFrom:
+          - configMapRef:
+              name: env-config
+        volumeMounts:
+        - name: gcpfirestore
+          mountPath: "/etc/gcpfirestore"
+          readOnly: true
+        - name: pv-volume-scraper-storage
+          mountPath: "/app/data/"
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+      - name: scraper-olx
+        image: flat_scraper:1.0.0
+        env:
+        - name: SCRAPER_CRAWLER_NAME
+          value: 'olx'
+        - name: JSONLINE_FILE_NAME
+          value: 'flats_olx'
+        envFrom:
+          - configMapRef:
+              name: env-config
+        volumeMounts:
+        - name: gcpfirestore
+          mountPath: "/etc/gcpfirestore"
+          readOnly: true
+        - name: pv-volume-scraper-storage
+          mountPath: "/app/data/"
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+      - name: scraper-gratka
+        image: flat_scraper:1.0.0
+        env:
+        - name: SCRAPER_CRAWLER_NAME
+          value: 'gratka'
+        - name: JSONLINE_FILE_NAME
+          value: 'flats_gratka'
+        envFrom:
+          - configMapRef:
+              name: env-config
+        volumeMounts:
+        - name: gcpfirestore
+          mountPath: "/etc/gcpfirestore"
+          readOnly: true
+        - name: pv-volume-scraper-storage
+          mountPath: "/app/data/"
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+      - name: scraper-morizon
+        image: flat_scraper:1.0.0
+        env:
+        - name: SCRAPER_CRAWLER_NAME
+          value: 'morizon'
+        - name: JSONLINE_FILE_NAME
+          value: 'flats_morizon'
+        envFrom:
+          - configMapRef:
+              name: env-config
+        volumeMounts:
+        - name: gcpfirestore
+          mountPath: "/etc/gcpfirestore"
+          readOnly: true
+        - name: pv-volume-scraper-storage
+          mountPath: "/app/data/"
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+            ephemeral-storage: "1Gi"
+      - name: redis
+        image: redis:5.0.8
+        command:
+          - redis-server
+          - "/redis-master/redis.conf"
+        env:
+        - name: MASTER
+          value: "true"
+        ports:
+        - containerPort: 6379
+        resources:
+          limits:
+            cpu: "300m"
+            memory: "512Mi"
+            ephemeral-storage: "512M"
+        volumeMounts:
+        - name: pv-volume-redis-storage
+          mountPath: /data/redis
+        - name: config
+          mountPath: /redis-master
+      volumes:
+      - name: gcpfirestore
+        secret:
+          secretName: gcp-firestore-dm7t9h22dh
+      - name: pv-volume-scraper-storage
+        persistentVolumeClaim:
+          claimName: pv-local-scraper-claim
+      - name: pv-volume-redis-storage
+        persistentVolumeClaim:
+          claimName: pv-local-redis-claim
+      - name: config
+        configMap:
+          name: redis-config
+          items:
+          - key: redis.txt
+            path: redis.conf

@@ -78,7 +78,12 @@ venv.bak/
 *.jsonl
 *.jsonline
 *.jsonlines
+!flats_gratka_20200412.jsonline
+!flats_morizon_20200412.jsonline
+!flats_olx_20200411.jsonline
+!flats_otodom_20200412.jsonline
 data
+pv_k8s
 mongodb/db/*
 !mongodb/db/.gitkeep
 nify/conf/archive/*

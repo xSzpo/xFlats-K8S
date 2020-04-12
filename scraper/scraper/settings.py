@@ -78,6 +78,7 @@ ITEM_PIPELINES = {
     'scraper.pipelines.ProcessItem': 100,
     'scraper.pipelines.CheckIfExistRedis': None,
     'scraper.pipelines.CheckIfExistGCPFirestore': None,
+    'scraper.pipelines.UpdateExistRedis': None,
     'scraper.pipelines.OutputFilter': 130,
     'scraper.pipelines.ProcessItemGeocode': 140,
     'scraper.pipelines.ValidSchema': 150,

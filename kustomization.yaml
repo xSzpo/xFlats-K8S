@@ -4,4 +4,4 @@ secretGenerator:
   - ./secrets/gcpfirestore_key.json
 resources:
 - ./configmap.yaml
-- ./deployment.yaml
+- ./volumes_local.yaml

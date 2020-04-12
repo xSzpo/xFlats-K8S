@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-local-scraper
+  labels:
+    type: local
+spec:
+  storageClassName: pv-local-scraper
+  capacity:
+    storage: 3Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/Users/xszpo/GoogleDrive/01_Projects/202003_xFlats_K8S/pv_k8s/scraper"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pv-local-scraper-claim
+spec:
+  storageClassName: pv-local-scraper
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-local-redis
+  labels:
+    type: local
+spec:
+  storageClassName: pv-local-redis
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/Users/xszpo/GoogleDrive/01_Projects/202003_xFlats_K8S/pv_k8s/redis"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pv-local-redis-claim
+spec:
+  storageClassName: pv-local-redis
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
