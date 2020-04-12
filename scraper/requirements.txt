@@ -3,7 +3,7 @@ requests
 xmltodict
 Scrapy==1.8.0
 Scrapy-UserAgents
-twisted==19.10.0
+twisted==20.3.0
 redis==3.4.1
 google-cloud-storage==1.26.0
 jsonschema==3.0.2
