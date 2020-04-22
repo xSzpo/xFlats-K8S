@@ -1,0 +1,36 @@
+# docker exec -it <container> /bin/bash
+
+version: '3.7'
+
+services:
+
+  redis:
+    image: redis:buster
+    container_name: redis
+    restart: always
+    ports:
+      - 6379:6379
+    networks:
+      - webnet
+
+  luigi:
+    image: xszpo/flats_luigi:0.0.1
+    container_name: luigi
+    restart: always
+    ports:
+    - 8082:8082
+    volumes:
+      - ./data:/data
+      - ../pv_k8s/scraper:/app/data/
+      - ../secrets/gcs_key.json:/etc/gcs/gcs_key.json
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    environment:
+      LUIGI_DAYSBACK: 12
+      LUIGI_BUCKET: gs://luigi_test
+      LUIGI_LOCALDIR: /app/data/
+
+    networks:
+      - webnet
+
+networks:
+  webnet:

@@ -168,6 +168,7 @@ class Spider3(scrapy.Spider):
 
     start_urls = xpath_json['gratka']['start_urls']
     list_page_url = xpath_json['gratka']['url']
+    next_page = xpath_json['gratka']['next_page']
     list_date_modified = xpath_json['gratka']['main_page_date_modified']
     article_page_iter_xpaths = xpath_json['gratka']['article_page_iter_xpaths']
 
@@ -184,8 +185,7 @@ class Spider3(scrapy.Spider):
                                  cb_kwargs=dict(date_modified=url[1]))
 
         # after you crawl each offer in current page go to the next page
-        next_page = response.url.split("?")[0] + \
-            "?page={}".format(self.pageCounter+1)
+        next_page = response.xpath(self.next_page).get()
 
         if next_page is not None and self.pageCounter < \
                 self.settings['CRAWL_LIST_PAGES']:

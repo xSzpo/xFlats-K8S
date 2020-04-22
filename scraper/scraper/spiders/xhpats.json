@@ -1,7 +1,7 @@
 {
       "otodom": {
             "start_urls": [
-                  "https://www.otodom.pl/sprzedaz/mieszkanie/warszawa"
+                  "https://www.otodom.pl/sprzedaz/mieszkanie/warszawa/?search%5Border%5D=created_at_first%3Adesc"
             ],
             "list_page_start_xpath": "//div[@class='col-md-content section-listing__row-content']//article[starts-with(@class,'offer-item ad')]",
             "list_page_iter_xpaths": {
@@ -30,7 +30,7 @@
       },
       "olx": {
             "start_urls": [
-                  "https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/warszawa"
+                  "https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/warszawa/?search%5Border%5D=created_at%3Adesc"
             ],
             "url": "//a[contains(@href,'www.olx.pl/oferta')]/@href",
             "next_page_css": "span.fbold.next.abs.large a::attr(href)",
@@ -52,12 +52,12 @@
             }
       },
       "gratka": {"start_urls": [
-                  "https://gratka.pl/nieruchomosci/mieszkania/warszawa/sprzedaz"
+                  "https://gratka.pl/nieruchomosci/mieszkania/warszawa/sprzedaz?sort=newest"
             ],
             "url_old":"//a[contains(@href,'gratka.pl/nieruchomosci/') and (@class='teaser__anchor' or @class='recommendedOffers__imgBox')]//@href",
             "url":"//div[@class='teaserEstate__infoBox']//h2[@class='teaserEstate__title']/a/@href",
             "main_page_date_modified":"//div[@class='teaserEstate__infoBox']//ul[@class='teaserEstate__details']/li[contains(text(),'Aktualizacja:')]",
-            "next_page": "",
+            "next_page": "//a[@class='pagination__nextPage']/@href",
             "article_page_iter_xpaths": {
                   "price": "translate(//span[@class='priceInfo__value']/text()[normalize-space()],'\t\n','')",
                   "name": "//h1[@class='sticker__title']/text()",
@@ -77,7 +77,7 @@
       },
       "morizon": {
             "start_urls": [
-                  "https://www.morizon.pl/mieszkania/warszawa"
+                  "https://www.morizon.pl/mieszkania/najnowsze/warszawa/"
             ],
             "url": "//a[contains(@href,'www.morizon.pl/oferta/')]/@href",
             "next_page": "//a[contains(@class,'mz-pagination-number__btn--next')]/@href",

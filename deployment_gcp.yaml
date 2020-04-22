@@ -15,9 +15,8 @@ spec:
         app: xflats
     spec:
       containers:
-      # docker build -t gcr.io/flats-272715/flat_scraper:1.0.0 .
       - name: scraper-otodom
-        image: gcr.io/flats-272715/flat_scraper:1.0.0
+        image: xszpo/flat_scraper:1.0.1
         env:
         - name: SCRAPER_CRAWLER_NAME
           value: 'otodom'
@@ -37,7 +36,7 @@ spec:
             cpu: "100m"
             memory: "256Mi"
       - name: scraper-olx
-        image: gcr.io/flats-272715/flat_scraper:1.0.0
+        image: xszpo/flat_scraper:1.0.1
         env:
         - name: SCRAPER_CRAWLER_NAME
           value: 'olx'
@@ -57,7 +56,7 @@ spec:
             cpu: "100m"
             memory: "256Mi"
       - name: scraper-gratka
-        image: gcr.io/flats-272715/flat_scraper:1.0.0
+        image: xszpo/flat_scraper:1.0.1
         env:
         - name: SCRAPER_CRAWLER_NAME
           value: 'gratka'
@@ -76,19 +75,18 @@ spec:
           limits:
             cpu: "100m"
             memory: "256Mi"
-      - name: scraper-morizon
-        image: gcr.io/flats-272715/flat_scraper:1.0.0
+      - name: luigi
+        image: xszpo/flats_luigi:0.0.1
         env:
-        - name: SCRAPER_CRAWLER_NAME
-          value: 'morizon'
-        - name: JSONLINE_FILE_NAME
-          value: 'flats_morizon'
-        envFrom:
-          - configMapRef:
-              name: env-config
+        - name: LUIGI_DAYSBACK
+          value: '12'
+        - name: LUIGI_BUCKET
+          value: 'gs://flats_jsonlines'
+        - name: LUIGI_LOCALDIR
+          value: '/app/data/'
         volumeMounts:
-        - name: gcpfirestore
-          mountPath: "/etc/gcpfirestore"
+        - name: gcs
+          mountPath: "/etc/gcs"
           readOnly: true
         - name: pv-volume-scraper-storage
           mountPath: "/app/data/"
@@ -120,6 +118,9 @@ spec:
       - name: gcpfirestore
         secret:
           secretName: gcp-firestore-dm7t9h22dh
+      - name: gcs
+        secret:
+            secretName: gcp-gcs-m45tkfcf8m
       - name: pv-volume-scraper-storage
         persistentVolumeClaim:
           claimName: pv-gcp-scraper-claim

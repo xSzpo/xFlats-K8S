@@ -2,6 +2,9 @@ secretGenerator:
 - name: gcp-firestore
   files:
   - ./secrets/gcpfirestore_key.json
+- name: gcp-gcs
+  files:
+  - ./secrets/gcs_key.json
 resources:
 - ./configmap.yaml
 - ./volumes_gcp.yaml

@@ -1,7 +1,6 @@
-# Use an official Python runtime as a parent image
-# docker run -it python:3.7-alpine /bin/bash
-# docker run -it python:3.7.2-slim bash
-#FROM python:3.6-slim
+#docker build -t xszpo/flats_luigi:0.0.1 .
+#docker push xszpo/flats_luigi:0.0.1
+
 
 FROM python:3.7-slim
 
@@ -10,9 +9,6 @@ WORKDIR /app
 
 # Copy the current directory contents into the container at /app
 COPY . /app
-
-# Install fuse
-RUN apt-get update && apt-get install -y fuse
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt

@@ -1,0 +1,197 @@
+[
+    {
+        "name": "_id",
+        "type": "STRING",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "tracking_id",
+        "type": "STRING",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "price",
+        "type": "NUMERIC",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "name",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "location",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "flat_size",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "rooms",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "floor",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "url",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "producer_name",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "main_url",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "price_m2",
+        "type": "NUMERIC",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "market",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "building_type",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "description",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "additional_info",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "number_of_floors",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "building_material",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "year_of_building",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "property_form",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "download_date",
+        "type": "DATE",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "download_date_utc",
+        "type": "NUMERIC",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "offeror",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "date_created",
+        "type": "DATE",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "date_modified",
+        "type": "DATE",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "GC_latitude",
+        "type": "NUMERIC",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "GC_longitude",
+        "type": "NUMERIC",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "GC_boundingbox",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "GC_addr_road",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "GC_addr_neighbourhood",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "GC_addr_suburb",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "GC_addr_city",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "GC_addr_state",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "GC_addr_postcode",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "GC_addr_country",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "GC_addr_country_code",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "prediction",
+        "type": "NUMERIC",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "old_flg",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "offer_date",
+        "type": "DATE",
+        "mode": "NULLABLE"
+    }
+]

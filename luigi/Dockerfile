@@ -1,0 +1,32 @@
+#docker build -t xszpo/flat_scraper:1.0.1 .
+#docker push xszpo/flat_scraper:1.0.1
+
+FROM spotify/luigi:2.7.2
+
+LABEL mainteriner=daniel.szponar@gmail.com
+
+EXPOSE 8082
+
+ENV GOOGLE_APPLICATION_CREDENTIALS "/etc/gcs/gcs_key.json"
+ENV PYTHONPATH /app
+ENV TZ=Europe/Warsaw
+ENV LANG=C.UTF-8
+ENV PYTHON_VERSION=3.6.4
+
+# ENV moved to manifest
+ENV LUIGI_DAYSBACK=12
+ENV LUIGI_BUCKET=gs://flats_jsonlines
+ENV LUIGI_LOCALDIR=/app/data/
+
+COPY . /app
+
+RUN mkdir -p /app/data/logs  && pip install --trusted-host pypi.python.org -r /app/requirements.txt
+# Run the cron every hour
+
+RUN echo "30  *  *  *  *  python /app/tasks.py" | crontab -
+
+# mask previouse entrypoint
+CMD ["/bin/sh"]
+
+# run script in crontab in foreground
+ENTRYPOINT crond -f -d 6 -c /etc/crontabs

@@ -5,7 +5,7 @@ metadata:
   namespace: default
 data:
  redis.txt: |
-  save 60 1
+  save 300 30
   rdbchecksum yes
   dbfilename redis_dump.rdb
   dir /data/redis/
@@ -23,7 +23,7 @@ data:
   REDIS_HOST: "localhost"
   REDIS_PORT: "6379"
   SCRAPER_CRAWL_LIST_PAGES: "2"
-  SCRAPER_DELAY_AFTER_EACH_RUN_SEC: "300"
+  SCRAPER_DELAY_AFTER_EACH_RUN_SEC: "600"
   SCRAPER_START_DELAY_SEC: "30"
   SCRAPER_CONCURRENT_REQUESTS: "1"
   scr_pipe_ProcessItem: "100"
