@@ -22,6 +22,8 @@ spec:
           value: 'otodom'
         - name: JSONLINE_FILE_NAME
           value: 'flats_otodom'
+        - name: SCRAPER_CRAWL_LIST_PAGES
+          value: '2'
         envFrom:
           - configMapRef:
               name: env-config
@@ -42,6 +44,8 @@ spec:
           value: 'olx'
         - name: JSONLINE_FILE_NAME
           value: 'flats_olx'
+        - name: SCRAPER_CRAWL_LIST_PAGES
+          value: '2'
         envFrom:
           - configMapRef:
               name: env-config
@@ -62,6 +66,8 @@ spec:
           value: 'gratka'
         - name: JSONLINE_FILE_NAME
           value: 'flats_gratka'
+        - name: SCRAPER_CRAWL_LIST_PAGES
+          value: '2'
         envFrom:
           - configMapRef:
               name: env-config

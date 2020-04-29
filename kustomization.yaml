@@ -7,5 +7,5 @@ secretGenerator:
   - ./secrets/gcs_key.json
 resources:
 - ./configmap.yaml
-- ./volumes_gcp.yaml
-#- ./volumes_local.yaml
+# ./volumes_gcp.yaml
+- ./volumes_local.yaml

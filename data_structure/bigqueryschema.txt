@@ -101,7 +101,7 @@
     },
     {
         "name": "download_date",
-        "type": "DATE",
+        "type": "DATETIME",
         "mode": "NULLABLE"
     },
     {
@@ -116,22 +116,22 @@
     },
     {
         "name": "date_created",
-        "type": "DATE",
+        "type": "DATETIME",
         "mode": "NULLABLE"
     },
     {
         "name": "date_modified",
-        "type": "DATE",
+        "type": "DATETIME",
         "mode": "NULLABLE"
     },
     {
         "name": "GC_latitude",
-        "type": "NUMERIC",
+        "type": "FLOAT64",
         "mode": "NULLABLE"
     },
     {
         "name": "GC_longitude",
-        "type": "NUMERIC",
+        "type": "FLOAT64",
         "mode": "NULLABLE"
     },
     {
@@ -191,7 +191,7 @@
     },
     {
         "name": "offer_date",
-        "type": "DATE",
+        "type": "DATETIME",
         "mode": "NULLABLE"
     }
 ]

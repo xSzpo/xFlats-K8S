@@ -1,0 +1,24 @@
+name: flats_mlmodel
+channels:
+  - defaults
+dependencies:
+  - python=3.7.4
+  - pip
+  - pandas=1.0.3
+  - numpy==1.18.1
+  - python-dateutil=2.8.1
+  - pytz=2019.3
+  - scipy=1.4.1
+  - notebook=6.0.3
+  - jupyterlab=1.2.6
+  - pdoc3=0.7.2
+  - jsonlines=1.2.0
+  - jsonschema=3.2.0
+  - pip:
+    - mlflow==1.8.0
+    - category-encoders==2.1.0
+    - lightgbm==2.3.1
+    - mlxtend==0.17.2
+    - tensorflow==2.1.0
+    - google-cloud-storage==1.26.0
+    - scikit-learn==0.22.2.post1

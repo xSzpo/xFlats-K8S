@@ -1,0 +1,20 @@
+# docker exec -it <container> /bin/bash
+
+version: '3.7'
+
+services:
+
+  luigi:
+    image: xszpo/flats_mlflow:0.0.0
+    container_name: mlflow
+    restart: always
+    ports:
+    - 8777:8777
+    volumes:
+      - ./model:/app/model
+
+    networks:
+      - webnet
+
+networks:
+  webnet:

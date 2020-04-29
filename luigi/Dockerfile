@@ -1,5 +1,5 @@
-#docker build -t xszpo/flat_scraper:1.0.1 .
-#docker push xszpo/flat_scraper:1.0.1
+#docker build -t xszpo/flats_luigi:0.0.2 .
+#docker push xszpo/flats_luigi:0.0.2
 
 FROM spotify/luigi:2.7.2
 

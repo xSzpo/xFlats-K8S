@@ -15,14 +15,15 @@ spec:
         app: xflats
     spec:
       containers:
-      # docker build -t flat_scraper:1.0.0 .
       - name: scraper-otodom
-        image: flat_scraper:1.0.0
+        image: xszpo/flat_scraper:1.0.1
         env:
         - name: SCRAPER_CRAWLER_NAME
           value: 'otodom'
         - name: JSONLINE_FILE_NAME
           value: 'flats_otodom'
+        - name: SCRAPER_CRAWL_LIST_PAGES
+          value: '2'
         envFrom:
           - configMapRef:
               name: env-config
@@ -34,15 +35,17 @@ spec:
           mountPath: "/app/data/"
         resources:
           limits:
-            cpu: "200m"
+            cpu: "0m"
             memory: "256Mi"
       - name: scraper-olx
-        image: flat_scraper:1.0.0
+        image: xszpo/flat_scraper:1.0.1
         env:
         - name: SCRAPER_CRAWLER_NAME
           value: 'olx'
         - name: JSONLINE_FILE_NAME
           value: 'flats_olx'
+        - name: SCRAPER_CRAWL_LIST_PAGES
+          value: '2'
         envFrom:
           - configMapRef:
               name: env-config
@@ -54,15 +57,17 @@ spec:
           mountPath: "/app/data/"
         resources:
           limits:
-            cpu: "200m"
+            cpu: "0m"
             memory: "256Mi"
       - name: scraper-gratka
-        image: flat_scraper:1.0.0
+        image: xszpo/flat_scraper:1.0.1
         env:
         - name: SCRAPER_CRAWLER_NAME
           value: 'gratka'
         - name: JSONLINE_FILE_NAME
           value: 'flats_gratka'
+        - name: SCRAPER_CRAWL_LIST_PAGES
+          value: '2'
         envFrom:
           - configMapRef:
               name: env-config
@@ -74,15 +79,17 @@ spec:
           mountPath: "/app/data/"
         resources:
           limits:
-            cpu: "200m"
+            cpu: "0m"
             memory: "256Mi"
       - name: scraper-morizon
-        image: flat_scraper:1.0.0
+        image: xszpo/flat_scraper:1.0.1
         env:
         - name: SCRAPER_CRAWLER_NAME
           value: 'morizon'
         - name: JSONLINE_FILE_NAME
           value: 'flats_morizon'
+        - name: SCRAPER_CRAWL_LIST_PAGES
+          value: '99'
         envFrom:
           - configMapRef:
               name: env-config
@@ -94,9 +101,27 @@ spec:
           mountPath: "/app/data/"
         resources:
           limits:
-            cpu: "200m"
+            cpu: "100m"
             memory: "256Mi"
-            ephemeral-storage: "1Gi"
+      - name: luigi
+        image: xszpo/flats_luigi:0.0.1
+        env:
+        - name: LUIGI_DAYSBACK
+          value: '12'
+        - name: LUIGI_BUCKET
+          value: 'gs://flats_jsonlines'
+        - name: LUIGI_LOCALDIR
+          value: '/app/data/'
+        volumeMounts:
+        - name: gcs
+          mountPath: "/etc/gcs"
+          readOnly: true
+        - name: pv-volume-scraper-storage
+          mountPath: "/app/data/"
+        resources:
+          limits:
+            cpu: "100m"
+            memory: "256Mi"
       - name: redis
         image: redis:5.0.8
         command:
@@ -109,7 +134,7 @@ spec:
         - containerPort: 6379
         resources:
           limits:
-            cpu: "300m"
+            cpu: "200m"
             memory: "512Mi"
             ephemeral-storage: "512M"
         volumeMounts:
@@ -121,6 +146,9 @@ spec:
       - name: gcpfirestore
         secret:
           secretName: gcp-firestore-dm7t9h22dh
+      - name: gcs
+        secret:
+            secretName: gcp-gcs-m45tkfcf8m
       - name: pv-volume-scraper-storage
         persistentVolumeClaim:
           claimName: pv-local-scraper-claim

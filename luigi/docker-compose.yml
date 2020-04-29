@@ -14,7 +14,7 @@ services:
       - webnet
 
   luigi:
-    image: xszpo/flats_luigi:0.0.1
+    image: xszpo/flats_luigi:0.0.2
     container_name: luigi
     restart: always
     ports:
