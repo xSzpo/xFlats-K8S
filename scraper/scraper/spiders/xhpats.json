@@ -102,5 +102,26 @@
                   "date_created":"//meta[@itemprop='name']/@content",
                   "date_modified": "//section[@class='propertyDetails']//tr[contains(th/text(),'Zaktualizowano')]/td/text()[normalize-space()]"
             }
+      },
+      "sprzedajemy_dzialka": {
+            "start_urls": [
+                  "https://sprzedajemy.pl/nieruchomosci/grunty-i-dzialki"
+            ],
+            "url": "//article[@class='element']/ul/li/h2[@class='title']/a/@href",
+            "main_page_date_modified": "//article[@class='element']/ul/li/time/@datetime",
+            "next_page_css": "li.next a::attr(href)",
+            "article_page_iter_xpaths": {
+                  "tracking_id": "normalize-space(substring-after(//div[@class='offerTitleBox']//li[contains(text(), 'Nr ogłoszenia')]/text()[1],':'))",
+                  "price": "normalize-space(//div[@class='offer-price-box']/div[@class='priceWrp']/strong/span/text())",
+                  "name": "normalize-space(//h1[@class='offerTitle']/strong/span/text())",
+                  "geo-coordinates": "//ul[@class='offerAdditionalInfo']/li/span/@data-coordinates",
+                  "location": "//ul[@class='offerAdditionalInfo']/li/span/span//text()",
+                  "size": "normalize-space(//div[@class='attributes-box']/ul//li[contains(span/text(),'Powierzchnia')]/strong)",
+                  "price_m2": "normalize-space(//div[@class='attributes-box']/ul//li[contains(span/text(),'Cena za m²')]/strong)",
+                  "description": "//div[@class='offerDescription']//text()",
+                  "offeror":"normalize-space(//div[@class='attributes-box']/ul//li[contains(span/text(),'Oferta od')]/strong)",
+                  "additional_info":"//div[@class='attributes-box']/ul//li//text()",
+                  "additional_info2" :"//div[@class='addtional-parameters-box']//text()"
+            }
       }
 }

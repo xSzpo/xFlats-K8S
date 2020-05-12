@@ -15,57 +15,13 @@ spec:
         app: xflats
     spec:
       containers:
-      - name: scraper-otodom
-        image: xszpo/flat_scraper:1.0.2
+      - name: scraper
+        image: xszpo/flat_scraper:1.0.3
         env:
         - name: SCRAPER_CRAWLER_NAME
-          value: 'otodom'
+          value: 'otodom, olx, gratka'
         - name: JSONLINE_FILE_NAME
-          value: 'flats_otodom'
-        - name: SCRAPER_CRAWL_LIST_PAGES
-          value: '2'
-        envFrom:
-          - configMapRef:
-              name: env-config
-        volumeMounts:
-        - name: gcpfirestore
-          mountPath: "/etc/gcpfirestore"
-          readOnly: true
-        - name: pv-volume-scraper-storage
-          mountPath: "/app/data/"
-        resources:
-          limits:
-            cpu: "100m"
-            memory: "256Mi"
-      - name: scraper-olx
-        image: xszpo/flat_scraper:1.0.2
-        env:
-        - name: SCRAPER_CRAWLER_NAME
-          value: 'olx'
-        - name: JSONLINE_FILE_NAME
-          value: 'flats_olx'
-        - name: SCRAPER_CRAWL_LIST_PAGES
-          value: '2'
-        envFrom:
-          - configMapRef:
-              name: env-config
-        volumeMounts:
-        - name: gcpfirestore
-          mountPath: "/etc/gcpfirestore"
-          readOnly: true
-        - name: pv-volume-scraper-storage
-          mountPath: "/app/data/"
-        resources:
-          limits:
-            cpu: "100m"
-            memory: "256Mi"
-      - name: scraper-gratka
-        image: xszpo/flat_scraper:1.0.2
-        env:
-        - name: SCRAPER_CRAWLER_NAME
-          value: 'gratka'
-        - name: JSONLINE_FILE_NAME
-          value: 'flats_gratka'
+          value: 'flats_all'
         - name: SCRAPER_CRAWL_LIST_PAGES
           value: '2'
         envFrom:

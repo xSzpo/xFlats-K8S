@@ -302,3 +302,90 @@ class Spider4(scrapy.Spider):
         tmp['body'] = base64.b64encode(zlib.compress(response.body)).decode()
 
         yield tmp
+
+
+class Spider5(scrapy.Spider):
+
+    def __init__(self):
+        super().__init__()
+        self.pageCounter = 1
+        self.mongo_connection = None
+
+    name = "sprzedajemy_dzialka"
+
+    xpath_json = None
+
+    with codecs.open("./scraper/spiders/xhpats.json", "r") as file:
+        xpath_json = json.load(file)
+
+    start_urls = xpath_json['sprzedajemy_dzialka']['start_urls']
+    list_page_url = xpath_json['sprzedajemy_dzialka']['url']
+    next_page_css = xpath_json['sprzedajemy_dzialka']['next_page_css']
+    list_date_modified = xpath_json['sprzedajemy_dzialka']['main_page_date_modified']
+    article_page_iter_xpaths = xpath_json['sprzedajemy_dzialka']['article_page_iter_xpaths']
+
+    allowed_domains = ["sprzedajemy.pl"]
+
+    def parse(self, response):
+
+        urls = response.xpath(self.list_page_url).getall()
+        dates_upd = response.xpath(self.list_date_modified).getall()
+
+        #for i, url in enumerate(urls):
+        #    yield scrapy.Request(response.urljoin(url), callback=self.parse_dir_contents)
+
+        for i, url in enumerate([i for i in zip(urls, dates_upd)]):
+            yield scrapy.Request(response.urljoin(url[0]),
+                                 callback=self.parse_dir_contents,
+                                 cb_kwargs=dict(date_modified=url[1]))
+
+        # after you crawl each offer in current page go to the next page
+        next_page = response.css(self.next_page_css).get()
+
+        if next_page is not None and self.pageCounter < \
+                self.settings['CRAWL_LIST_PAGES']:
+            if next_page is not None and self.pageCounter >= 1:
+                logger.info("SPRZEDAJEMY_DZIALKA: next page, iter {}, url: {}".format(
+                    self.pageCounter, next_page))
+            self.pageCounter += 1
+            yield response.follow(next_page, callback=self.parse)
+
+    def parse_dir_contents(self, response, date_modified):
+        logger.info("IM IN")
+
+        tmp = {}
+
+        for key in self.article_page_iter_xpaths:
+            tmp[key] = response.xpath(self.article_page_iter_xpaths[key]).get()
+
+        tmp['location'] = " ".join(response.xpath(
+            self.article_page_iter_xpaths['location']).getall())
+
+        tmp['description'] = "\n".join(response.xpath(
+            self.article_page_iter_xpaths['description']).getall())
+
+        tmp['additional_info'] = re.sub(r"\W+", " ", " ".join(response.xpath(
+            self.article_page_iter_xpaths['additional_info']).
+            getall()).strip())
+
+        tmp['additional_info'] += " " + re.sub(r"\W+", " ", " ".join(
+            response.xpath(self.article_page_iter_xpaths['additional_info2']).
+            getall()).strip())
+
+        tmp['geo_coordinates'] = {
+            "latitude": json.loads(
+                tmp['geo-coordinates'].replace("'", '"'))['lat'],
+            "longitude": json.loads(
+                tmp['geo-coordinates'].replace("'", '"'))['lng'],}
+
+        tmp['url'] = response.url
+        tmp['producer_name'] = self.name
+        tmp['main_url'] = self.start_urls[0]
+
+        tmp['date_created'] = None
+        tmp['date_modified'] = parse(date_modified)
+
+        #zlib.decompress(base64.b64decode(x))
+        #tmp['body'] = base64.b64encode(zlib.compress(response.body)).decode()
+
+        yield tmp

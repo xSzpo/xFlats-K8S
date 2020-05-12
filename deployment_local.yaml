@@ -15,13 +15,13 @@ spec:
         app: xflats
     spec:
       containers:
-      - name: scraper-otodom
-        image: xszpo/flat_scraper:1.0.1
+      - name: scraper
+        image: xszpo/flat_scraper:1.0.3
         env:
         - name: SCRAPER_CRAWLER_NAME
-          value: 'otodom'
+          value: 'otodom, gratka, morizon'
         - name: JSONLINE_FILE_NAME
-          value: 'flats_otodom'
+          value: 'flats_all'
         - name: SCRAPER_CRAWL_LIST_PAGES
           value: '2'
         envFrom:
@@ -36,72 +36,6 @@ spec:
         resources:
           limits:
             cpu: "0m"
-            memory: "256Mi"
-      - name: scraper-olx
-        image: xszpo/flat_scraper:1.0.1
-        env:
-        - name: SCRAPER_CRAWLER_NAME
-          value: 'olx'
-        - name: JSONLINE_FILE_NAME
-          value: 'flats_olx'
-        - name: SCRAPER_CRAWL_LIST_PAGES
-          value: '2'
-        envFrom:
-          - configMapRef:
-              name: env-config
-        volumeMounts:
-        - name: gcpfirestore
-          mountPath: "/etc/gcpfirestore"
-          readOnly: true
-        - name: pv-volume-scraper-storage
-          mountPath: "/app/data/"
-        resources:
-          limits:
-            cpu: "0m"
-            memory: "256Mi"
-      - name: scraper-gratka
-        image: xszpo/flat_scraper:1.0.1
-        env:
-        - name: SCRAPER_CRAWLER_NAME
-          value: 'gratka'
-        - name: JSONLINE_FILE_NAME
-          value: 'flats_gratka'
-        - name: SCRAPER_CRAWL_LIST_PAGES
-          value: '2'
-        envFrom:
-          - configMapRef:
-              name: env-config
-        volumeMounts:
-        - name: gcpfirestore
-          mountPath: "/etc/gcpfirestore"
-          readOnly: true
-        - name: pv-volume-scraper-storage
-          mountPath: "/app/data/"
-        resources:
-          limits:
-            cpu: "0m"
-            memory: "256Mi"
-      - name: scraper-morizon
-        image: xszpo/flat_scraper:1.0.1
-        env:
-        - name: SCRAPER_CRAWLER_NAME
-          value: 'morizon'
-        - name: JSONLINE_FILE_NAME
-          value: 'flats_morizon'
-        - name: SCRAPER_CRAWL_LIST_PAGES
-          value: '99'
-        envFrom:
-          - configMapRef:
-              name: env-config
-        volumeMounts:
-        - name: gcpfirestore
-          mountPath: "/etc/gcpfirestore"
-          readOnly: true
-        - name: pv-volume-scraper-storage
-          mountPath: "/app/data/"
-        resources:
-          limits:
-            cpu: "100m"
             memory: "256Mi"
       - name: luigi
         image: xszpo/flats_luigi:0.0.1

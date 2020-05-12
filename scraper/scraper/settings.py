@@ -26,7 +26,7 @@ FEED_EXPORT_ENCODING = "UTF-8"
 COOKIES_ENABLED = False
 ROBOTSTXT_OBEY = True
 CONCURRENT_REQUESTS = 1
-DOWNLOAD_DELAY = 0.5
+DOWNLOAD_DELAY = 3
 LOGSTATS_INTERVAL = 0
 CRAWL_LIST_PAGES = 999  # how many pages with links ]to crawl (start pages)
 
@@ -35,7 +35,7 @@ CRAWL_LIST_PAGES = 999  # how many pages with links ]to crawl (start pages)
 # PRODUCER SETTINGS
 ###################
 
-BOT_NAME = 'otodom'
+BOT_NAME = 'xname'
 
 #################
 # OUTPUT SETTINGS
@@ -64,11 +64,11 @@ FIRESTORE_STR2DATE = ['download_date', 'date_created', 'date_modified']
 # local
 
 LOCAL_FILE_DIR = "/Users/xszpo/GoogleDrive/01_Projects/202003_xFlats_K8S/scraper/data/"
-LOCAL_FILE_NAME = "data_nok8s"
+LOCAL_FILE_NAME = "data_nok8s_plot"
 ADDDATE2NAME = True
 
 # schema
-SCHEMA_FILE_NAME = 'schema.json'
+SCHEMA_FILE_NAME = 'schema_plot.json'
 
 ##########
 # PIELINES

@@ -40,8 +40,10 @@ class ProcessItem:
             item = self.process_item_gratka(item)
         elif item['producer_name'] == 'morizon':
             item = self.process_item_morizon(item)
+        elif item['producer_name'] == 'sprzedajemy_dzialka':
+            item = self.process_item_sprzedajemy_dzialka(item)
         else:
-            raise ValueError
+            raise ValueError('There is no %s in ProcessItem' % item['producer_name'])
         return item
 
     def process_item_ototdom(self, item):
@@ -114,6 +116,22 @@ class ProcessItem:
 
         item['download_date'] = helpers.Scraper.datetime2str(helpers.Scraper.current_datetime())
         item['download_date_utc'] = time.time()
+        return item
+
+    def process_item_sprzedajemy_dzialka(self, item):
+
+        item['tracking_id'] = item['tracking_id'].strip()
+        logger.info(item['price'])
+        item['price'] = helpers.Scraper.digits_from_str(item['price'], returntype=int)
+        item['_id'] = ("sprz_d_"+str(item["tracking_id"]) + "_" + str(item['price'])).strip()
+        item['size'] = helpers.Scraper.digits_from_str(item['size'], returntype=int)
+        item['price_m2'] = helpers.Scraper.digits_from_str(item['price_m2'], returntype=int)
+
+        item['date_modified'] = helpers.Scraper.datetime2str(item['date_modified'])
+
+        item['download_date'] = helpers.Scraper.datetime2str(helpers.Scraper.current_datetime())
+        item['download_date_utc'] = time.time()
+
         return item
 
 
