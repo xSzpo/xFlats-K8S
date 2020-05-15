@@ -1,5 +1,6 @@
-#docker build -t xszpo/flat_scraper:1.0.3 .
-#docker push xszpo/flat_scraper:1.0.3
+#docker build -t xszpo/flat_scraper:1.0.8 .
+#docker push xszpo/flat_scraper:1.0.8
+
 
 
 FROM python:3.7-slim
@@ -11,7 +12,7 @@ WORKDIR /app
 COPY . /app
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+RUN pip install --upgrade pip && pip install --trusted-host pypi.python.org -r requirements.txt
 
 # run
 ENTRYPOINT ["python", "-u","/app/app.py"]

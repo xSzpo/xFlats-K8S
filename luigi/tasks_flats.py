@@ -34,7 +34,8 @@ class UploadJsonlines(luigi.Task):
     bucket = luigi.Parameter(default="gs://flats_jsonlines")
     localdir = luigi.Parameter(default="/app/data/")
     filepatterns = luigi.ListParameter(
-        default=['flats_otodom_{date:%Y%m%d}.jsonline',
+        default=['flats_all_{date:%Y%m%d}.jsonline',
+                 'flats_otodom_{date:%Y%m%d}.jsonline',
                  'flats_olx_{date:%Y%m%d}.jsonline',
                  'flats_gratka_{date:%Y%m%d}.jsonline',
                  'flats_morizon_{date:%Y%m%d}.jsonline'])

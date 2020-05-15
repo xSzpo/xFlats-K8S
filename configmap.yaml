@@ -16,8 +16,12 @@ metadata:
   name: env-config
   namespace: default
 data:
-  GCP_FIRESTORE_COLLECTION: 'flats'
   GCP_FIRESTORE_SECRETS_PATH: "/etc/gcpfirestore/gcpfirestore_key.json"
+  TELEGRAM_KEY_PATH: "/etc/telegram/telegram_key.json"
+  TELEGRAM_FLATS_KEYWORDS: "x"
+  TELEGRAM_FLATS_QUERY: "x"
+  TELEGRAM_PLOTS_KEYWORDS: "rzek|rzec|lini\\w+\\W+brzeg|jezio"
+  TELEGRAM_PLOTS_QUERY: "distance <200 and price <150000"
   JSONLINE_FILE_DIR: "/app/data/"
   JSONLINE_ADDDATE2NAME: "True"
   REDIS_HOST: "localhost"
@@ -33,6 +37,7 @@ data:
   scr_pipe_ProcessItemGeocode: "140"
   scr_pipe_ValidSchema: "150"
   scr_pipe_OrderbySchema: "160"
+  scr_pipe_SendTelegramMessage: "165"
   scr_pipe_OutputLocal: "170"
   scr_pipe_OutputGCPFirestore: "180"
   scr_pipe_OutputRedis: "190"

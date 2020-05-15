@@ -44,13 +44,21 @@ def scraper(event={}, context={}):
     # local
     settings['LOCAL_FILE_DIR'] = os.getenv("JSONLINE_FILE_DIR",
             "/Users/xszpo/GoogleDrive/01_Projects/202003_xFlats_K8S/scraper/data/")
-    settings['LOCAL_FILE_NAME'] = os.getenv("JSONLINE_FILE_NAME", "data_nok8s")
+    settings['LOCAL_FILE_NAME'] = os.getenv("JSONLINE_FILE_NAME", "data_flats")
     settings['ADDDATE2NAME'] = bool(os.getenv("JSONLINE_ADDDATE2NAME",
                                               "True") == "True")
 
+    # telegram
+    settings['TELEGRAM_KEY_PATH'] = os.getenv('TELEGRAM_KEY_PATH',
+        "/Users/xszpo/GoogleDrive/01_Projects/202003_xFlats_K8S/secrets/telegram_key.json")
+    settings['TELEGRAM_FLATS_KEYWORDS'] = os.getenv('TELEGRAM_FLATS_KEYWORDS', "")
+    settings['TELEGRAM_FLATS_QUERY'] = os.getenv('TELEGRAM_FLATS_QUERY', "")
+    settings['TELEGRAM_PLOTS_KEYWORDS'] = os.getenv('TELEGRAM_PLOTS_KEYWORDS', "rzek|rzec|lini\w+\W+brzeg|jezio")
+    settings['TELEGRAM_PLOTS_QUERY'] = os.getenv('TELEGRAM_PLOTS_QUERY', "distance <200 and price <150000")
+
     # scraper config
     settings['CRAWL_LIST_PAGES'] = int(os.getenv("SCRAPER_CRAWL_LIST_PAGES",
-                                                 "1"))
+                                                 "2"))
     settings['CONCURRENT_REQUESTS'] = int(
         os.getenv("SCRAPER_CONCURRENT_REQUESTS", "1"))
 
@@ -71,6 +79,8 @@ def scraper(event={}, context={}):
                                                   "150"),
         'scraper.pipelines.OrderbySchema': env2pipe("scr_pipe_OrderbySchema",
                                                     "160"),
+        'scraper.pipelines.SendTelegramMessage': env2pipe("scr_pipe_SendTelegramMessage",
+                                                    "165"),
         'scraper.pipelines.OutputLocal': env2pipe("scr_pipe_OutputLocal",
                                                   "170"),
         'scraper.pipelines.OutputGCPFirestore': env2pipe(
@@ -107,7 +117,8 @@ def scraper(event={}, context={}):
         deferred.addCallback(_crawl, spider)
         return deferred
 
-    spiders = os.getenv("SCRAPER_CRAWLER_NAME", "olx, otodom, gratka, morizon")
+    #spiders = os.getenv("SCRAPER_CRAWLER_NAME", "olx, otodom, gratka, morizon")
+    spiders = os.getenv("SCRAPER_CRAWLER_NAME", "plot_sprzedajemy, plot_gumtree")
 
     for spider_name in [i.strip() for i in spiders.split(",")]:
         _crawl(None, spider_name)

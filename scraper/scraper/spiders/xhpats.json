@@ -123,5 +123,23 @@
                   "additional_info":"//div[@class='attributes-box']/ul//li//text()",
                   "additional_info2" :"//div[@class='addtional-parameters-box']//text()"
             }
+      },
+      "gumtree_dzialka": {
+            "start_urls": [
+                  "https://www.gumtree.pl/s-dzialki/v1c9194p1"
+            ],
+            "url": "//div[@class='view']//div[@class='tileV1']/div[@class='title']/a/@href",
+            "next_page": "//*[@id='pagination']/div/span[@class='pag-box']/a/@href",
+            "article_page_iter_xpaths": {
+                  "tracking_id": "normalize-space(substring-after(//span[@class='title']/text(),' '))",
+                  "price": "normalize-space(//div[@class='vip-title clearfix']//div[@class='price']//span[@class='amount']/text())",
+                  "name": "//h1[@class='item-title']/span[@class='myAdTitle']/text()",
+                  "geo-coordinates": "substring-after(//span[@class='google-maps-link']/@data-uri,'q=')",
+                  "location": "//div[@class='attribute' and contains(span/text(),'Lokalizacja')]//a/text()",
+                  "description": "//div[@class='description']//text()",
+                  "offeror":"//div[@class='attribute' and contains(span/text(),'Na sprzeda')]/span[@class='value']/text()",
+                  "date_created": "//div[@class='attribute' and contains(span/text(),'Data dodania')]/span[@class='value']/text()",
+                  "additional_info":"//div[@class='attributes-box']/ul//li//text()"
+            }
       }
 }

@@ -12,6 +12,17 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: pv-gcp-scraper-plots-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
   name: pv-gcp-redis-claim
 spec:
   accessModes:

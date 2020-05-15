@@ -6,7 +6,7 @@
         "price": {"type": "number",  "minimum": 0, "maximum": 10000000},
         "name": {"type": "string"},
         "location": {"type": "string"},
-        "size": {"type": "integer"},
+        "size": {"type": ["integer", "null"]},
         "url": {"type": "string", "format":"uri"},
         "producer_name": {"type": "string"},
         "main_url": {"type": "string", "format":"uri"},

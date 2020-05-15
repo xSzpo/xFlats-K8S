@@ -20,10 +20,13 @@ ENV LUIGI_LOCALDIR=/app/data/
 
 COPY . /app
 
-RUN mkdir -p /app/data/logs  && pip install --trusted-host pypi.python.org -r /app/requirements.txt
+RUN mkdir -p /app/data/logs \
+    && pip install --upgrade pip \
+    && pip install --trusted-host pypi.python.org -r /app/requirements.txt
 # Run the cron every hour
 
-RUN echo "30  *  *  *  *  python /app/tasks.py" | crontab -
+RUN echo "30  *  *  *  *  python /app/tasks_flats.py" | crontab -
+RUN echo "35  *  *  *  *  python /app/tasks_plots.py" | crontab -
 
 # mask previouse entrypoint
 CMD ["/bin/sh"]

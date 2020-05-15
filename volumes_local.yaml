@@ -28,6 +28,33 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
+  name: pv-local-scraper-plots
+  labels:
+    type: local
+spec:
+  storageClassName: pv-local-scraper
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/Users/xszpo/GoogleDrive/01_Projects/202003_xFlats_K8S/pv_k8s/scraper_plots"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pv-local-scraper-plots-claim
+spec:
+  storageClassName: pv-local-scraper
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
   name: pv-local-redis
   labels:
     type: local

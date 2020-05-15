@@ -15,13 +15,15 @@ spec:
         app: xflats
     spec:
       containers:
-      - name: scraper
-        image: xszpo/flat_scraper:1.0.3
+      - name: scraper-flats
+        image: xszpo/flat_scraper:1.0.8
         env:
         - name: SCRAPER_CRAWLER_NAME
           value: 'otodom, olx, gratka'
         - name: JSONLINE_FILE_NAME
           value: 'flats_all'
+        - name: GCP_FIRESTORE_COLLECTION
+          value: flats
         - name: SCRAPER_CRAWL_LIST_PAGES
           value: '2'
         envFrom:
@@ -31,14 +33,44 @@ spec:
         - name: gcpfirestore
           mountPath: "/etc/gcpfirestore"
           readOnly: true
+        - name: telegram
+          mountPath: "/etc/telegram"
+          readOnly: true
         - name: pv-volume-scraper-storage
           mountPath: "/app/data/"
         resources:
           limits:
             cpu: "100m"
             memory: "256Mi"
+      - name: scraper-plots
+        image: xszpo/flat_scraper:1.0.8
+        env:
+        - name: SCRAPER_CRAWLER_NAME
+          value: 'plot_sprzedajemy, plot_gumtree'
+        - name: JSONLINE_FILE_NAME
+          value: 'plots_all'
+        - name: GCP_FIRESTORE_COLLECTION
+          value: plots
+        - name: SCRAPER_CRAWL_LIST_PAGES
+          value: '2'
+        envFrom:
+          - configMapRef:
+              name: env-config
+        volumeMounts:
+        - name: gcpfirestore
+          mountPath: "/etc/gcpfirestore"
+          readOnly: true
+        - name: telegram
+          mountPath: "/etc/telegram"
+          readOnly: true
+        - name: pv-volume-scraper-plots-storage
+          mountPath: "/app/data/"
+        resources:
+          limits:
+            cpu: "100m"
+            memory: "256Mi"
       - name: luigi
-        image: xszpo/flats_luigi:0.0.1
+        image: xszpo/flats_luigi:0.0.2
         env:
         - name: LUIGI_DAYSBACK
           value: '12'
@@ -46,12 +78,18 @@ spec:
           value: 'gs://flats_jsonlines'
         - name: LUIGI_LOCALDIR
           value: '/app/data/'
+        - name: LUIGI_BUCKET_PLOTS
+          value: 'gs://plots_jsonlines'
+        - name: LUIGI_LOCALDIR_PLOTS
+          value: '/app/data_plots/'
         volumeMounts:
         - name: gcs
           mountPath: "/etc/gcs"
           readOnly: true
         - name: pv-volume-scraper-storage
           mountPath: "/app/data/"
+        - name: pv-volume-scraper-plots-storage
+          mountPath: "/app/data_plots/"
         resources:
           limits:
             cpu: "100m"
@@ -83,12 +121,18 @@ spec:
       - name: gcs
         secret:
             secretName: gcp-gcs-m45tkfcf8m
+      - name: telegram
+        secret:
+            secretName: telegram-5bb96t2mf8
       - name: pv-volume-scraper-storage
         persistentVolumeClaim:
           claimName: pv-gcp-scraper-claim
       - name: pv-volume-redis-storage
         persistentVolumeClaim:
           claimName: pv-gcp-redis-claim
+      - name: pv-volume-scraper-plots-storage
+        persistentVolumeClaim:
+          claimName: pv-gcp-scraper-plots-claim
       - name: config
         configMap:
           name: redis-config

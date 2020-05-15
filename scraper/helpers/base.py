@@ -8,6 +8,7 @@ from functools import reduce
 import codecs
 import pytz
 import gc
+import math
 from dateutil.parser import parse
 from scrapy import logformatter
 from scrapy.exceptions import DropItem
@@ -240,3 +241,33 @@ class Geodata:
             return geocoordinates, address_text, address_coordin
         except BaseException as e:
             raise DropItem("Openstreetmap error, %s " % e)
+
+    @staticmethod
+    def haversine(GC_latitude, GC_longitude):
+        """calculates distance between coordinates and Warsaw, Jana Kazmierza
+
+        Parameters
+        ----------
+        GC_latitude : float
+            latitude ex. 52.22264693429859
+        GC_longitude : float
+            longitude, ex. 20.938653945922855
+
+        Returns
+        -------
+        int
+            distance in kilometers
+        """
+
+        R = 6372800  # Earth radius in meters
+        lat1, lon1 = (52.22264693429859, 20.938653945922855)
+        lat2, lon2 = (GC_latitude, GC_longitude)
+
+        phi1, phi2 = math.radians(lat1), math.radians(lat2)
+        dphi = math.radians(lat2 - lat1)
+        dlambda = math.radians(lon2 - lon1)
+
+        a = math.sin(dphi/2)**2 + \
+            math.cos(phi1)*math.cos(phi2)*math.sin(dlambda/2)**2
+
+        return int(2*R*math.atan2(math.sqrt(a), math.sqrt(1 - a))/1000)

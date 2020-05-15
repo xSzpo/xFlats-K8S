@@ -5,7 +5,10 @@ secretGenerator:
 - name: gcp-gcs
   files:
   - ./secrets/gcs_key.json
+- name: telegram
+  files:
+  - ./secrets/telegram_key.json
 resources:
 - ./configmap.yaml
 - ./volumes_gcp.yaml
-# ./volumes_local.yaml
+#- ./volumes_local.yaml

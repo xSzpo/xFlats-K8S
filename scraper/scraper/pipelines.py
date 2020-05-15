@@ -24,6 +24,9 @@ from dateutil.parser import parse
 from jsonschema import validate, Draft3Validator, SchemaError, ValidationError
 import jsonschema
 import helpers
+import urllib
+import requests
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -40,8 +43,10 @@ class ProcessItem:
             item = self.process_item_gratka(item)
         elif item['producer_name'] == 'morizon':
             item = self.process_item_morizon(item)
-        elif item['producer_name'] == 'sprzedajemy_dzialka':
-            item = self.process_item_sprzedajemy_dzialka(item)
+        elif item['producer_name'] == 'plot_sprzedajemy':
+            item = self.process_item_plot_sprzedajemy(item)
+        elif item['producer_name'] == 'plot_gumtree':
+            item = self.process_item_plot_gumtree(item)
         else:
             raise ValueError('There is no %s in ProcessItem' % item['producer_name'])
         return item
@@ -118,10 +123,9 @@ class ProcessItem:
         item['download_date_utc'] = time.time()
         return item
 
-    def process_item_sprzedajemy_dzialka(self, item):
+    def process_item_plot_sprzedajemy(self, item):
 
         item['tracking_id'] = item['tracking_id'].strip()
-        logger.info(item['price'])
         item['price'] = helpers.Scraper.digits_from_str(item['price'], returntype=int)
         item['_id'] = ("sprz_d_"+str(item["tracking_id"]) + "_" + str(item['price'])).strip()
         item['size'] = helpers.Scraper.digits_from_str(item['size'], returntype=int)
@@ -132,6 +136,17 @@ class ProcessItem:
         item['download_date'] = helpers.Scraper.datetime2str(helpers.Scraper.current_datetime())
         item['download_date_utc'] = time.time()
 
+        return item
+
+    def process_item_plot_gumtree(self, item):
+
+        item['tracking_id'] = item['tracking_id'].strip()
+        item['price'] = helpers.Scraper.digits_from_str(item['price'], returntype=int)
+        item['_id'] = ("gum_d_"+str(item["tracking_id"]) + "_" + str(item['price'])).strip()
+        item['size'] = helpers.Scraper.digits_from_str(item['size'], returntype=int)
+        item['date_created'] = helpers.Scraper.datetime2str(item['date_created'])
+        item['download_date'] = helpers.Scraper.datetime2str(helpers.Scraper.current_datetime())
+        item['download_date_utc'] = time.time()
         return item
 
 
@@ -196,6 +211,8 @@ class OutputLocal:
     def process_item(self, item, spider):
         _ = spider
 
+        producer = item['producer_name']
+
         today = date.today().strftime("%Y%m%d")
 
         if self.file_adddate2name:
@@ -205,7 +222,8 @@ class OutputLocal:
             file_path = os.path.join(self.file_dir, self.file_name+".jsonline")
 
         file = codecs.open(file_path, 'a', encoding=self.encoding)
-        logger.info("Local jsonline: save offer {}".format(item['_id']))
+        logger.info("{}: Local jsonline: save offer {}".format(producer,
+                                                               item['_id']))
         line = json.dumps(dict(item), ensure_ascii=False) + "\n"
         file.write(line)
         file.close()
@@ -244,17 +262,18 @@ class OutputRedis():
     def process_item(self, item, spider):
 
         _ = spider
+        producer = item['producer_name']
 
         try:
             self.r.set(item[self.id_field], 1)
-            logger.info("Redis: add to cache {}".format(
-                item[self.id_field]))
+            logger.info("{}: Redis: add to cache {}".format(
+                producer, item[self.id_field]))
         except (redis.ConnectionError) as e:
-            logger.error("Could not connect to server: %s" % e)
+            logger.error("%s: Could not connect to server: %s" % (producer, e))
         except BaseException as e:
             logger.error(item[self.id_field])
-            logger.error("BaseException at Redis, something went wrong: %s" %
-                         e)
+            logger.error("%s: BaseException at Redis, something went wrong: %s"
+                         % (producer, e))
         return item
 
 
@@ -263,22 +282,24 @@ class CheckIfExistRedis(OutputRedis):
     def process_item(self, item, spider):
 
         _ = spider
+        producer = item['producer_name']
 
         try:
             if ("found" in item) and ("cache" not in item):
                 self.r.set(item[self.id_field], 1)
-                logger.info("Redis: add to cache {}".format(
-                    item[self.id_field]))
+                logger.info("{}: Redis: add to cache {}".format(producer,
+                            item[self.id_field]))
             elif self.r.exists(item[self.id_field]) and ("cache" not in item):
                 item["found"] = True
                 item["cache"] = True
-                logger.info("Redis: found {} ".format(
-                    item[self.id_field]))
+                logger.info("{}: Redis: found {} ".format(producer,
+                            item[self.id_field]))
         except (redis.ConnectionError) as e:
-            logger.error("Could not connect to server: %s" % e)
+            logger.error("%s: Could not connect to server: %s" % (producer, e))
         except BaseException as e:
             logger.error(item[self.id_field])
-            logger.error("BaseException at Redis, something went wrong: %s" % e)
+            logger.error("%s: BaseException at Redis, something went wrong: %s"
+                         % (producer, e))
         return item
 
 
@@ -309,6 +330,10 @@ class OutputGCPFirestore():
     def process_item(self, item, spider):
 
         _ = spider
+        try:
+            producer = item['producer_name']
+        except BaseException:
+            producer = "Unknow"
 
         try:
             tmp = item.copy()
@@ -325,17 +350,18 @@ class OutputGCPFirestore():
             doc_lv2 = doc_lv1.collection('more').document('data')
             doc_lv2.set(more)
 
-            logger.info("Firestore: added {} to collection {}".format(
-                item[self.id_field], self.collection))
+            logger.info("{}: Firestore: added {} to collection {}".format(
+                producer, item[self.id_field], self.collection))
 
         except (google.cloud.exceptions.Forbidden,
                 google.cloud.exceptions.Unauthorized) as e:
-            logger.error("Could not connect to Firestore server: %s" % e)
+            logger.error("%s Could not connect to Firestore server: %s" %
+                         (producer, e))
 
         except BaseException as e:
             logger.error(item[self.id_field])
-            logger.error("BaseException at GCP Firestore (check existence)" +
-                         " something went wrong: %s" % e)
+            logger.error("%s: BaseException at GCP Firestore (check " +
+                         "existence) something went wrong: %s" % (producer, e))
         return item
 
 
@@ -344,6 +370,10 @@ class CheckIfExistGCPFirestore(OutputGCPFirestore):
     def process_item(self, item, spider):
 
         _ = spider
+        try:
+            producer = item['producer_name']
+        except BaseException:
+            producer = "Unknow"
 
         try:
             if "found" not in item:
@@ -352,17 +382,17 @@ class CheckIfExistGCPFirestore(OutputGCPFirestore):
 
                 if result:
                     item['found'] = True
-                    logger.info("Firestore: found {} ".format(
-                        item[self.id_field]))
+                    logger.info("{}: Firestore: found {} ".format(producer,
+                                item[self.id_field]))
 
         except (google.cloud.exceptions.Forbidden,
                 google.cloud.exceptions.Unauthorized) as e:
-            logger.error("Could not connect to server: %s" % e)
+            logger.error("%s: Could not connect to server: %s" % (producer, e))
 
         except BaseException as e:
             logger.error(item[self.id_field])
-            logger.error("BaseException at GCP Firestore (check existence)" +
-                         " something went wrong: %s" % e)
+            logger.error("%s: BaseException at GCP Firestore (check " +
+                         "existence) something went wrong: %s" % (producer, e))
 
         return item
 
@@ -401,8 +431,13 @@ class OutputFilter:
 
     def process_item(self, item, spider):
 
+        try:
+            producer = item['producer_name']
+        except BaseException:
+            producer = "Unknow"
+
         if "found" in item:
-            raise DropItem("Found Drop {}!".format(item['_id']))
+            raise DropItem("{}: Found Drop {}!".format(producer, item['_id']))
 
         elif not self.valid.is_valid(item):
             errors = sorted(self.valid.iter_errors(item),
@@ -410,7 +445,8 @@ class OutputFilter:
             errors_plain = "\n".join([(e.relative_path[-1]+" -> "+e.message)
                                       for e in errors])
             logger.info(errors_plain)
-            raise DropItem("Invalid schema Drop {}!".format(item['_id']))
+            raise DropItem("{}: Invalid schema Drop {}!".format(producer,
+                                                                item['_id']))
         else:
             return item
 
@@ -426,6 +462,11 @@ class ValidSchema(OutputFilter):
 class OrderbySchema(OutputFilter):
 
     def process_item(self, item, spider):
+
+        try:
+            producer = item['producer_name']
+        except BaseException:
+            producer = "Unknow"
 
         keys_schema = sorted(self.schema.keys(), key=lambda x: x.lower())
         keys_item = sorted(item.keys(), key=lambda x: x.lower())
@@ -445,3 +486,82 @@ class OrderbySchema(OutputFilter):
         #_ = tmp.pop('description')
 
         return tmp
+
+
+class SendTelegramMessage:
+
+    def __init__(self, key_path, keywords_flats, query_flats,
+                 keywords_plots, query_plots):
+        self.key_path = key_path
+        self.keywords_flats = keywords_flats
+        self.query_flats = query_flats
+        self.keywords_plots = keywords_plots
+        self.query_plots = query_plots
+
+        with open(self.key_path, "r") as file:
+            self.telegram_key = json.load(file)
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(
+            key_path=crawler.settings.get('TELEGRAM_KEY_PATH'),
+            keywords_flats=crawler.settings.get('TELEGRAM_FLATS_KEYWORDS'),
+            query_flats=crawler.settings.get('TELEGRAM_FLATS_QUERY'),
+            keywords_plots=crawler.settings.get('TELEGRAM_PLOTS_KEYWORDS'),
+            query_plots=crawler.settings.get('TELEGRAM_PLOTS_QUERY'),
+        )
+
+    def process_item(self, item, spider):
+        _ = spider
+
+        try:
+            producer = item['producer_name']
+        except BaseException:
+            producer = "Unknow"
+
+        import math
+
+        if item['producer_name'] in ('plot_gumtree', 'plot_sprzedajemy'):
+
+            df = pd.DataFrame([item])
+
+            keywords = self.keywords_plots
+            query = self.query_plots
+            key = self.telegram_key['key']
+            chat_id = self.telegram_key['chat_id']
+
+            df = df.assign(
+                distance=lambda x: x.apply(
+                    lambda x: helpers.Geodata.haversine(
+                        x['GC_latitude'], x['GC_longitude']), axis=1),
+                keywords=lambda x: x.apply(
+                    lambda x: True if re.search(
+                        keywords,
+                        x['name'] + " " + x['description'], re.IGNORECASE)
+                    else False, axis=1))
+
+            for i, row in df.query(query).iterrows():
+                name = row['name'].strip()
+                price = row['price']
+                url = row['url']
+                description = (row['description'].strip()[
+                    :min(len(row['description']), 150)])
+                exclaimer = "UWAGA!!\n" if row['keywords'] else ""
+
+                text1 = exclaimer + \
+                    'Znalazlem dzialke: \n' +  \
+                    name + ' \n ' + \
+                    url + ' \n ' + \
+                    'Cena: ' + str(price) + ' pln' + ' \n ' + \
+                    'Opis: ' + description
+
+                text2 = exclaimer + \
+                    'Znalazlem dzialke: \n' +  \
+                    url
+
+                urltmp = 'https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s'
+                url = urltmp % (key, chat_id,
+                                urllib.parse.quote_plus(text2))
+                _ = requests.get(url, timeout=10)
+
+        return item

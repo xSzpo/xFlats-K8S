@@ -70,6 +70,13 @@ ADDDATE2NAME = True
 # schema
 SCHEMA_FILE_NAME = 'schema_plot.json'
 
+# schema
+TELEGRAM_KEY_PATH = "/Users/xszpo/GoogleDrive/01_Projects/202003_xFlats_K8S/secrets/telegram_key.json"
+TELEGRAM_FLATS_KEYWORDS = ""
+TELEGRAM_FLATS_QUERY = ""
+TELEGRAM_PLOTS_KEYWORDS = "rzek|rzec|lini\w+\W+brzeg|jezio"
+TELEGRAM_PLOTS_QUERY = "distance <200 and price <150000"
+
 ##########
 # PIELINES
 ##########
@@ -83,6 +90,7 @@ ITEM_PIPELINES = {
     'scraper.pipelines.ProcessItemGeocode': 140,
     'scraper.pipelines.ValidSchema': 150,
     'scraper.pipelines.OrderbySchema': 160,
+    'scraper.pipelines.SendTelegramMessage': 165,
     'scraper.pipelines.OutputLocal': 170,
     'scraper.pipelines.OutputGCPFirestore': None,
     'scraper.pipelines.OutputRedis': None,

@@ -13,7 +13,7 @@ from helpers.base import Geodata
 logger = logging.getLogger(__name__)
 
 
-class Spider1(scrapy.Spider):
+class SpiderFlatOtodom(scrapy.Spider):
 
     def __init__(self):
         super().__init__()
@@ -81,7 +81,7 @@ class Spider1(scrapy.Spider):
         yield tmp
 
 
-class Spider2(scrapy.Spider):
+class SpiderFlatOlx(scrapy.Spider):
 
     def __init__(self):
         super().__init__()
@@ -152,7 +152,7 @@ class Spider2(scrapy.Spider):
         yield tmp
 
 
-class Spider3(scrapy.Spider):
+class SpiderFlatGratka(scrapy.Spider):
 
     def __init__(self):
         super().__init__()
@@ -229,7 +229,7 @@ class Spider3(scrapy.Spider):
         yield tmp
 
 
-class Spider4(scrapy.Spider):
+class SpiderFlatMorizon(scrapy.Spider):
 
     def __init__(self):
         super().__init__()
@@ -304,14 +304,14 @@ class Spider4(scrapy.Spider):
         yield tmp
 
 
-class Spider5(scrapy.Spider):
+class SpiderPlotSprzedajemy(scrapy.Spider):
 
     def __init__(self):
         super().__init__()
         self.pageCounter = 1
         self.mongo_connection = None
 
-    name = "sprzedajemy_dzialka"
+    name = "plot_sprzedajemy"
 
     xpath_json = None
 
@@ -351,7 +351,6 @@ class Spider5(scrapy.Spider):
             yield response.follow(next_page, callback=self.parse)
 
     def parse_dir_contents(self, response, date_modified):
-        logger.info("IM IN")
 
         tmp = {}
 
@@ -386,6 +385,83 @@ class Spider5(scrapy.Spider):
         tmp['date_modified'] = parse(date_modified)
 
         #zlib.decompress(base64.b64decode(x))
-        #tmp['body'] = base64.b64encode(zlib.compress(response.body)).decode()
+        tmp['body'] = base64.b64encode(zlib.compress(response.body)).decode()
+
+        yield tmp
+
+
+class SpiderPlotGumtree(scrapy.Spider):
+
+    def __init__(self):
+        super().__init__()
+        self.pageCounter = 1
+        self.mongo_connection = None
+
+    name = "plot_gumtree"
+
+    xpath_json = None
+
+    with codecs.open("./scraper/spiders/xhpats.json", "r") as file:
+        xpath_json = json.load(file)
+
+    start_urls = xpath_json['gumtree_dzialka']['start_urls']
+    list_page_url = xpath_json['gumtree_dzialka']['url']
+    next_page = xpath_json['gumtree_dzialka']['next_page']
+    article_page_iter_xpaths = xpath_json['gumtree_dzialka']['article_page_iter_xpaths']
+
+    allowed_domains = ["gumtree.pl"]
+
+    def parse(self, response):
+
+        for i, url in enumerate(response.xpath(self.list_page_url).getall()):
+            yield scrapy.Request(response.urljoin(url), callback=self.parse_dir_contents)
+
+        # after you crawl each offer in current page go to the next page
+        next_page = response.xpath(self.next_page).get()
+
+        if next_page is not None and self.pageCounter < \
+                self.settings['CRAWL_LIST_PAGES']:
+            if next_page is not None and self.pageCounter >= 1:
+                logger.info("SPRZEDAJEMY_DZIALKA: next page, iter {}, url: {}".format(
+                    self.pageCounter, next_page))
+            self.pageCounter += 1
+            yield response.follow(next_page, callback=self.parse)
+
+    def parse_dir_contents(self, response):
+
+        tmp = {}
+
+        for key in self.article_page_iter_xpaths:
+            tmp[key] = response.xpath(self.article_page_iter_xpaths[key]).get()
+
+        tmp['location'] = " ".join(response.xpath(
+            self.article_page_iter_xpaths['location']).getall())
+
+        tmp['description'] = "\n".join(response.xpath(
+            self.article_page_iter_xpaths['description']).getall())
+
+        tmp['price'] = tmp['price'].encode('ascii', 'ignore').decode()
+
+        tmp['additional_info'] = None
+        tmp['price_m2'] = None
+
+        tmp['geo_coordinates'] = {
+            "latitude": tmp['geo-coordinates'].split(',')[0],
+            "longitude": tmp['geo-coordinates'].split(',')[1]}
+
+        size0 = Scraper.searchregex(tmp['name'], r"(\d+ ?\d{3,})m2", group=1)
+        size1 = Scraper.searchregex(tmp['name']+' '+tmp['description'], r"powierz\w+\W+(\d+ ?\d{3,})", group=1)
+        size2 = Scraper.searchregex(tmp['name']+' '+tmp['description'], r"(\d+ ?\d{3,})m2", group=1)
+        tmp['size'] = size0 or size1 or size2
+
+        tmp['url'] = response.url
+        tmp['producer_name'] = self.name
+        tmp['main_url'] = self.start_urls[0]
+
+        tmp['date_created'] = parse(tmp['date_created'], dayfirst=True)
+        tmp['date_modified'] = None
+
+        #zlib.decompress(base64.b64decode(x))
+        tmp['body'] = base64.b64encode(zlib.compress(response.body)).decode()
 
         yield tmp
