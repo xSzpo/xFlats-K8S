@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: scraper-flats
-        image: xszpo/flat_scraper:1.0.8
+        image: xszpo/flat_scraper:1.0.13
         env:
         - name: SCRAPER_CRAWLER_NAME
           value: 'otodom, olx, gratka'
@@ -43,10 +43,10 @@ spec:
             cpu: "100m"
             memory: "256Mi"
       - name: scraper-plots
-        image: xszpo/flat_scraper:1.0.8
+        image: xszpo/flat_scraper:1.0.13
         env:
         - name: SCRAPER_CRAWLER_NAME
-          value: 'plot_sprzedajemy, plot_gumtree'
+          value: 'plot_sprzedajemy, plot_gumtree, plot_olx, plot_gratka, plot_otodom'
         - name: JSONLINE_FILE_NAME
           value: 'plots_all'
         - name: GCP_FIRESTORE_COLLECTION
@@ -70,10 +70,10 @@ spec:
             cpu: "100m"
             memory: "256Mi"
       - name: luigi
-        image: xszpo/flats_luigi:0.0.2
+        image: xszpo/flats_luigi:0.0.4
         env:
         - name: LUIGI_DAYSBACK
-          value: '12'
+          value: '15'
         - name: LUIGI_BUCKET
           value: 'gs://flats_jsonlines'
         - name: LUIGI_LOCALDIR

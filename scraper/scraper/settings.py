@@ -74,8 +74,8 @@ SCHEMA_FILE_NAME = 'schema_plot.json'
 TELEGRAM_KEY_PATH = "/Users/xszpo/GoogleDrive/01_Projects/202003_xFlats_K8S/secrets/telegram_key.json"
 TELEGRAM_FLATS_KEYWORDS = ""
 TELEGRAM_FLATS_QUERY = ""
-TELEGRAM_PLOTS_KEYWORDS = "rzek|rzec|lini\w+\W+brzeg|jezio"
-TELEGRAM_PLOTS_QUERY = "distance <200 and price <150000"
+TELEGRAM_PLOTS_KEYWORDS = "rzek.|brzeg|jeziorem|jezioro|jeziorami|pla.z|zalew|narew|narwi|bug|wkr.|wisl|zegrz"
+TELEGRAM_PLOTS_QUERY = "distance <150 and price <150000"
 
 ##########
 # PIELINES

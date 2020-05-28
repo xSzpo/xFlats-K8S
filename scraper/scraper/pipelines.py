@@ -47,6 +47,12 @@ class ProcessItem:
             item = self.process_item_plot_sprzedajemy(item)
         elif item['producer_name'] == 'plot_gumtree':
             item = self.process_item_plot_gumtree(item)
+        elif item['producer_name'] == 'plot_olx':
+            item = self.process_item_plot_olx(item)
+        elif item['producer_name'] == 'plot_gratka':
+            item = self.process_item_plot_gratka(item)
+        elif item['producer_name'] == 'plot_otodom':
+            item = self.process_item_plot_ototdom(item)
         else:
             raise ValueError('There is no %s in ProcessItem' % item['producer_name'])
         return item
@@ -145,6 +151,42 @@ class ProcessItem:
         item['_id'] = ("gum_d_"+str(item["tracking_id"]) + "_" + str(item['price'])).strip()
         item['size'] = helpers.Scraper.digits_from_str(item['size'], returntype=int)
         item['date_created'] = helpers.Scraper.datetime2str(item['date_created'])
+        item['download_date'] = helpers.Scraper.datetime2str(helpers.Scraper.current_datetime())
+        item['download_date_utc'] = time.time()
+        return item
+
+    def process_item_plot_olx(self, item):
+
+        item['tracking_id'] = item['tracking_id'].strip()
+        item['price'] = helpers.Scraper.digits_from_str(item['price'], returntype=int)
+        item['_id'] = ("olx_d_"+str(item["tracking_id"]) + "_" + str(item['price'])).strip()
+        item['size'] = helpers.Scraper.digits_from_str(item['size'], returntype=int)
+        item['price_m2'] = helpers.Scraper.digits_from_str(item['price_m2'], returntype=int)
+        item['download_date'] = helpers.Scraper.datetime2str(helpers.Scraper.current_datetime())
+        item['download_date_utc'] = time.time()
+        return item
+
+    def process_item_plot_gratka(self, item):
+
+        item['tracking_id'] = str(item['tracking_id'])
+        item['price'] = helpers.Scraper.digits_from_str(item['price'], returntype=int)
+        item['_id'] = ("gra_d_"+str(item["tracking_id"]) + "_" + str(item['price'])).strip()
+        item['size'] = helpers.Scraper.digits_from_str(item['size'], returntype=int)
+        item['price_m2'] = helpers.Scraper.digits_from_str(item['price_m2'], returntype=int)
+        item['date_modified'] = helpers.Scraper.datetime2str(item['date_modified'])
+        item['download_date'] = helpers.Scraper.datetime2str(helpers.Scraper.current_datetime())
+        item['download_date_utc'] = time.time()
+        return item
+
+    def process_item_plot_ototdom(self, item):
+
+        item['tracking_id'] = item['tracking_id'].strip()
+        item['price'] = helpers.Scraper.digits_from_str(item['price'], returntype=int)
+        item['_id'] = ("oto_d_"+str(item["tracking_id"]) + "_" + str(item['price'])).strip()
+        item['size'] = helpers.Scraper.digits_from_str(item['size'], returntype=int)
+        item['price_m2'] = helpers.Scraper.digits_from_str(item['price_m2'], returntype=int)
+        item['date_created'] = helpers.Scraper.datetime2str(item['date_created'])
+        item['date_modified'] = helpers.Scraper.datetime2str(item['date_modified'])
         item['download_date'] = helpers.Scraper.datetime2str(helpers.Scraper.current_datetime())
         item['download_date_utc'] = time.time()
         return item
@@ -521,7 +563,7 @@ class SendTelegramMessage:
 
         import math
 
-        if item['producer_name'] in ('plot_gumtree', 'plot_sprzedajemy'):
+        if item['producer_name'] in ('plot_gumtree', 'plot_sprzedajemy', 'plot_olx'):
 
             df = pd.DataFrame([item])
 
@@ -533,35 +575,28 @@ class SendTelegramMessage:
             df = df.assign(
                 distance=lambda x: x.apply(
                     lambda x: helpers.Geodata.haversine(
-                        x['GC_latitude'], x['GC_longitude']), axis=1),
-                keywords=lambda x: x.apply(
-                    lambda x: True if re.search(
-                        keywords,
-                        x['name'] + " " + x['description'], re.IGNORECASE)
-                    else False, axis=1))
+                        x['GC_latitude'], x['GC_longitude']), axis=1)
+                        )
 
             for i, row in df.query(query).iterrows():
                 name = row['name'].strip()
                 price = row['price']
                 url = row['url']
+                distance = df.distance
                 description = (row['description'].strip()[
                     :min(len(row['description']), 150)])
-                exclaimer = "UWAGA!!\n" if row['keywords'] else ""
 
-                text1 = exclaimer + \
-                    'Znalazlem dzialke: \n' +  \
-                    name + ' \n ' + \
-                    url + ' \n ' + \
+                text = 'Znalazlem dzialke: \n' +  \
                     'Cena: ' + str(price) + ' pln' + ' \n ' + \
-                    'Opis: ' + description
-
-                text2 = exclaimer + \
-                    'Znalazlem dzialke: \n' +  \
+                    'Odleglos od Warszawy: %d km \n' % distance + \
                     url
 
-                urltmp = 'https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s'
-                url = urltmp % (key, chat_id,
-                                urllib.parse.quote_plus(text2))
-                _ = requests.get(url, timeout=10)
+                if re.search(keywords, row['name'] + " " + row['description'],
+                             re.IGNORECASE):
+                    logger.info("%s: Telegram sent message %s: %s" % (producer, row['_id'], text))
+                    urltmp = 'https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s'
+                    url = urltmp % (key, chat_id,
+                                    urllib.parse.quote_plus(text))
+                    _ = requests.get(url, timeout=10)
 
         return item

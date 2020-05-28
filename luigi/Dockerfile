@@ -1,5 +1,5 @@
-#docker build -t xszpo/flats_luigi:0.0.2 .
-#docker push xszpo/flats_luigi:0.0.2
+#docker build -t xszpo/flats_luigi:0.0.4 .
+#docker push xszpo/flats_luigi:0.0.4
 
 FROM spotify/luigi:2.7.2
 
@@ -26,7 +26,7 @@ RUN mkdir -p /app/data/logs \
 # Run the cron every hour
 
 RUN echo "30  *  *  *  *  python /app/tasks_flats.py" | crontab -
-RUN echo "35  *  *  *  *  python /app/tasks_plots.py" | crontab -
+RUN echo "35  *  *  *  *  python /app/tasks_plots.py" >> /etc/crontabs/root
 
 # mask previouse entrypoint
 CMD ["/bin/sh"]
