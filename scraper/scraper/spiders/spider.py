@@ -604,7 +604,7 @@ class SpiderPlotGratka(scrapy.Spider):
         yield tmp
 
 
-class SpiderFlatOtodom(scrapy.Spider):
+class SpiderPlotOtodom(scrapy.Spider):
 
     def __init__(self):
         super().__init__()

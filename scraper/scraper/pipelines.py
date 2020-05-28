@@ -563,7 +563,7 @@ class SendTelegramMessage:
 
         import math
 
-        if item['producer_name'] in ('plot_gumtree', 'plot_sprzedajemy', 'plot_olx'):
+        if 'plot' in item['producer_name']:
 
             df = pd.DataFrame([item])
 

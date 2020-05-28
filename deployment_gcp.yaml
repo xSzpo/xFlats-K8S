@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: scraper-flats
-        image: xszpo/flat_scraper:1.0.13
+        image: xszpo/flat_scraper:1.0.15
         env:
         - name: SCRAPER_CRAWLER_NAME
           value: 'otodom, olx, gratka'
@@ -43,7 +43,7 @@ spec:
             cpu: "100m"
             memory: "256Mi"
       - name: scraper-plots
-        image: xszpo/flat_scraper:1.0.13
+        image: xszpo/flat_scraper:1.0.15
         env:
         - name: SCRAPER_CRAWLER_NAME
           value: 'plot_sprzedajemy, plot_gumtree, plot_olx, plot_gratka, plot_otodom'
