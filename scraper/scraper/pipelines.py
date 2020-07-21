@@ -582,6 +582,7 @@ class SendTelegramMessage:
                 name = row['name'].strip()
                 price = row['price']
                 url = row['url']
+                id_ = row['_id']
                 distance = df.distance
                 description = (row['description'].strip()[
                     :min(len(row['description']), 150)])
@@ -589,6 +590,7 @@ class SendTelegramMessage:
                 text = 'Znalazlem dzialke: \n' +  \
                     'Cena: ' + str(price) + ' pln' + ' \n ' + \
                     'Odleglos od Warszawy: %d km \n' % distance + \
+                    f'>>{{"id":"{id_}"}}<< \n ' + \
                     url
 
                 if re.search(keywords, row['name'] + " " + row['description'],
