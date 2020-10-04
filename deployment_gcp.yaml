@@ -74,17 +74,18 @@ spec:
         env:
         - name: LUIGI_DAYSBACK
           value: '15'
-        - name: LUIGI_BUCKET
-          value: 'gs://flats_jsonlines'
-        - name: LUIGI_LOCALDIR
-          value: '/app/data/'
-        - name: LUIGI_BUCKET_PLOTS
-          value: 'gs://plots_jsonlines'
-        - name: LUIGI_LOCALDIR_PLOTS
-          value: '/app/data_plots/'
+        envFrom:
+          - configMapRef:
+              name: env-config-luigi
         volumeMounts:
         - name: gcs
           mountPath: "/etc/gcs"
+          readOnly: true
+        - name: gcpfirestore
+          mountPath: "/etc/gcpfirestore"
+          readOnly: true
+        - name: telegram
+          mountPath: "/etc/telegram"
           readOnly: true
         - name: pv-volume-scraper-storage
           mountPath: "/app/data/"
@@ -117,10 +118,10 @@ spec:
       volumes:
       - name: gcpfirestore
         secret:
-          secretName: gcp-firestore-dm7t9h22dh
+          secretName: gcp-firestore-88gkcd5h5k
       - name: gcs
         secret:
-            secretName: gcp-gcs-m45tkfcf8m
+            secretName: gcp-gcs-9dc8kb67m6
       - name: telegram
         secret:
             secretName: telegram-5bb96t2mf8

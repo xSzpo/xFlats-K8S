@@ -42,3 +42,16 @@ scale
 ```
 kubectl scale deploy xflats --replicas=0
 ```
+
+copy from pod
+```
+kubectl cp default/xflats-58695565f8-rkj9l:/data/redis/redis_dump.rdb redis_dump.rdb -c redis
+
+kubectl cp redis_dump.rdb default/xflats-597995dd96-9mwzr:/data/redis/redis_dump.rdb
+```
+
+DLA NOWEGO konta GOOGLE:
+
+1. Dodaj konto daniel.szponar@gmail.com (kliknij autoryzacje na poczcie)
+2. Po wykonaniu `kubectl apply -k .` pobierz nazwy secretow i zmień secretName w pliku deployment_gcp.yaml
+3.
