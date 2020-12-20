@@ -38,7 +38,9 @@ class SpiderFlatOtodom(scrapy.Spider):
     def parse(self, response):
         for i, offer in enumerate(response.xpath(self.list_page_start_xpath)):
             url = offer.xpath(self.list_page_iter_xpaths['url']).get()
-            yield scrapy.Request(url, callback=self.parse_dir_contents)
+            offeror = offer.xpath(self.list_page_iter_xpaths['offeror']).get().strip()
+            yield scrapy.Request(url, callback=self.parse_dir_contents,
+                                    cb_kwargs=dict(offeror=offeror))
 
         # after you crawl each offer in current page go to the next page
         next_page = response.css(self.next_page_css).get()
@@ -51,7 +53,7 @@ class SpiderFlatOtodom(scrapy.Spider):
             self.pageCounter += 1
             yield response.follow(next_page, callback=self.parse)
 
-    def parse_dir_contents(self, response):
+    def parse_dir_contents(self, response, offeror):
 
         tmp = {}
 
@@ -72,11 +74,19 @@ class SpiderFlatOtodom(scrapy.Spider):
                                                   regex, group=1, func=parse)
         tmp['date_modified'] = Scraper.searchregex(response.body.decode(),
                                                    regex, group=2, func=parse)
+
+        tmp['tracking_id'] = Scraper.searchregex(response.body.decode(),
+                                                  "ad.:{.id.:(\d+)", group=1)
         tmp['url'] = response.url
         tmp['producer_name'] = self.name
         tmp['main_url'] = self.start_urls[0]
         # zlib.decompress(base64.b64decode(x))
         tmp['body'] = base64.b64encode(zlib.compress(response.body)).decode()
+        tmp['offeror'] = offeror
+        #_tmp = tmp.copy()
+        #_tmp.pop('body')
+        #_tmp.pop('description')
+        #logger.info(_tmp['offeror'])
 
         yield tmp
 
@@ -629,7 +639,9 @@ class SpiderPlotOtodom(scrapy.Spider):
     def parse(self, response):
         for i, offer in enumerate(response.xpath(self.list_page_start_xpath)):
             url = offer.xpath(self.list_page_iter_xpaths['url']).get()
-            yield scrapy.Request(url, callback=self.parse_dir_contents)
+            offeror = offer.xpath(self.list_page_iter_xpaths['offeror']).get().strip()
+            yield scrapy.Request(url, callback=self.parse_dir_contents,
+                                    cb_kwargs=dict(offeror=offeror))
 
         # after you crawl each offer in current page go to the next page
         next_page = response.css(self.next_page_css).get()
@@ -642,7 +654,7 @@ class SpiderPlotOtodom(scrapy.Spider):
             self.pageCounter += 1
             yield response.follow(next_page, callback=self.parse)
 
-    def parse_dir_contents(self, response):
+    def parse_dir_contents(self, response, offeror):
 
         tmp = {}
 
@@ -666,6 +678,10 @@ class SpiderPlotOtodom(scrapy.Spider):
         tmp['url'] = response.url
         tmp['producer_name'] = self.name
         tmp['main_url'] = self.start_urls[0]
+        tmp['offeror'] = offeror
+        tmp['tracking_id'] = Scraper.searchregex(response.body.decode(),
+                                                  "ad.:{.id.:(\d+)", group=1)
+
         # zlib.decompress(base64.b64decode(x))
         tmp['body'] = base64.b64encode(zlib.compress(response.body)).decode()
 

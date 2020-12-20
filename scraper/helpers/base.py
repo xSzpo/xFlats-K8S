@@ -187,12 +187,13 @@ class Geodata:
     @staticmethod
     def get_geodata_otodom(content):
 
-        pattern = 'geo..\{(.*?)\}'
+        pattern = "latitude.:(5\d.\d+),.longitude.:(2\d.\d+)"
         if re.search(pattern, content.decode("utf-8")):
-            list_geo = re.findall(pattern, content.decode("utf-8"))
-            text = [row for row in list_geo if Scraper.contains_digit(row)][0]
-            text = text.replace('"', '')
-            geocoordinates = dict([i.split(":") for i in text.split(",")])
+            geocoordinates = dict()
+            geocoordinates['latitude'] = Scraper.searchregex(
+                content.decode("utf-8"),"latitude.:(5\d.\d+),.longitude.:(2\d.\d+)", group=1)
+            geocoordinates['longitude'] = Scraper.searchregex(
+                content.decode("utf-8"),"latitude.:(5\d.\d+),.longitude.:(2\d.\d+)", group=2)
             return geocoordinates
         else:
             return dict()

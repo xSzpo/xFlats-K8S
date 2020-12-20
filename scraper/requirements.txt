@@ -1,5 +1,6 @@
 pip
 requests
+python-dateutil
 xmltodict
 Scrapy==1.8.0
 Scrapy-UserAgents

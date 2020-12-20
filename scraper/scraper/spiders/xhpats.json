@@ -5,27 +5,26 @@
             ],
             "list_page_start_xpath": "//div[@class='col-md-content section-listing__row-content']//article[starts-with(@class,'offer-item ad')]",
             "list_page_iter_xpaths": {
-                  "url": "@data-url"
+                  "url": "@data-url",
+                  "offeror":"//li[contains(@class,'pull-right\n')]/text()"
             },
             "next_page_css": "li.pager-next a::attr(href)",
             "article_page_iter_xpaths": {
-                  "tracking_id": "normalize-space(substring-after(//div[contains(text(),'Nr oferty w Otodom')]/text()[1],':'))",
-                  "price": "//*[@id='root']/article/header/div[2]/div[1]/div[2]/text()[1]",
-                  "name": "//*[@id='root']/article/header/div[1]/div/div/h1/text()",
-                  "location": "//*[@id='root']/article/header/div[1]/div/div/div/a/text()",
-                  "flat_size": "//section[@class='section-overview']//li[contains(text(),'Powierzchnia')]/strong/text()[normalize-space()]",
-                  "rooms": "//section[@class='section-overview']//li[contains(text(),'Liczba pokoi')]/strong/text()[normalize-space()]",
-                  "floor": "//section[@class='section-overview']//li[contains(text(),'Piętro')]/strong/text()[normalize-space()]",
-                  "price_m2": "//*[@id='root']/article/header/div[2]/div[2]/div/text()",
-                  "market": "//section[@class='section-overview']//li[contains(text(),'Rynek')]/strong/text()[normalize-space()]",
-                  "building_type": "//section[@class='section-overview']//li[contains(text(),'Rodzaj zabudowy')]/strong/text()[normalize-space()]",
-                  "description": "//section[@class='section-description']//div//text()",
-                  "number_of_floors": "//section[@class='section-overview']//li[contains(text(),'Liczba pięter')]/strong/text()[normalize-space()]",
-                  "building_material": "//section[@class='section-overview']//li[contains(text(),'Materiał budynku')]/strong/text()[normalize-space()]",
-                  "year_of_building": "//section[@class='section-overview']//li[contains(text(),'Rok budowy')]/strong/text()[normalize-space()]",
-                  "property_form": "//section[@class='section-overview']//li[contains(text(),'Forma własności')]/strong/text()[normalize-space()]",
-                  "offeror":"//*[@id='root']/article/div[1]/text()",
-                  "additional_info":"//section[@class='section-overview' or @class='section-features']//div//text()"
+                  "price": "//*[@aria-label='Cena']/text()",
+                  "name": "//*[@data-cy='adPageAdTitle']/text()",
+                  "location": "//a[@href='#map']/text()",
+                  "flat_size": "//div[@title='Powierzchnia']/following::div[1]/text()",
+                  "rooms": "//div[@title='Liczba pokoi']/following::div[1]/text()",
+                  "floor": "//div[@title='Piętro']/following::div[1]/text()",
+                  "price_m2": "//*[@aria-label='Cena za metr kwadratowy']/text()",
+                  "market": "//div[@title='Rynek']/following::div[1]/text()",
+                  "building_type": "//div[@title='Rodzaj zabudowy']/following::div[1]/text()",
+                  "description": "//*[@data-cy='adPageAdDescription']//text()",
+                  "number_of_floors": "//div[@title='Liczba pięter']/following::div[1]/text()",
+                  "building_material": "//div[@title='Materiał budynku']/following::div[1]/text()",
+                  "year_of_building": "//div[@title='Rok budowy']/following::div[1]/text()",
+                  "property_form": "//div[@title='Forma własności']/following::div[1]/text()",
+                  "additional_info":"//h2[contains(.,'Informacje dodatkowe')]/following::ul[1]//li//text()"
             }
       },
       "olx": {
@@ -55,8 +54,8 @@
                   "https://gratka.pl/nieruchomosci/mieszkania/warszawa/sprzedaz?sort=newest"
             ],
             "url_old":"//a[contains(@href,'gratka.pl/nieruchomosci/') and (@class='teaser__anchor' or @class='recommendedOffers__imgBox')]//@href",
-            "url":"//div[@class='teaserEstate__infoBox']//h2[@class='teaserEstate__title']/a/@href",
-            "main_page_date_modified":"//div[@class='teaserEstate__infoBox']//ul[@class='teaserEstate__details']/li[contains(text(),'Aktualizacja:')]",
+            "url":"//article[contains(@class,'teaserEstate')]/@data-href",
+            "main_page_date_modified":"//article[contains(@class,'teaserEstate')]//li[@class='teaserEstate__info']/text()[contains(.,'Aktualizacja:')]",
             "next_page": "//a[@class='pagination__nextPage']/@href",
             "article_page_iter_xpaths": {
                   "price": "translate(//span[@class='priceInfo__value']/text()[normalize-space()],'\t\n','')",
@@ -165,8 +164,8 @@
             "start_urls": [
                   "https://gratka.pl/nieruchomosci/dzialki-grunty?sort=newest"
             ],
-            "url":"//div[@class='teaserEstate__infoBox']//h2[@class='teaserEstate__title']/a/@href",
-            "main_page_date_modified":"//div[@class='teaserEstate__infoBox']//ul[@class='teaserEstate__details']/li[contains(text(),'Aktualizacja:')]/text()",
+            "url":"//article[contains(@class,'teaserEstate')]/@data-href",
+            "main_page_date_modified":"//article[contains(@class,'teaserEstate')]//li[@class='teaserEstate__info']/text()[contains(.,'Aktualizacja:')]",
             "next_page": "//a[@class='pagination__nextPage']/@href",
             "article_page_iter_xpaths": {
                   "price": "translate(//span[@class='priceInfo__value']/text()[normalize-space()],'\t\n','')",
@@ -184,19 +183,18 @@
             ],
             "list_page_start_xpath": "//div[@class='col-md-content section-listing__row-content']//article[starts-with(@class,'offer-item ad')]",
             "list_page_iter_xpaths": {
-                  "url": "@data-url"
+                  "url": "@data-url",
+                  "offeror":"//li[contains(@class,'pull-right\n')]/text()"
             },
             "next_page_css": "li.pager-next a::attr(href)",
             "article_page_iter_xpaths": {
-                  "tracking_id": "normalize-space(substring-after(//div[contains(text(),'Nr oferty w Otodom')]/text()[1],':'))",
-                  "price": "//*[@id='root']/article/header/div[2]/div[1]/div[2]/text()[1]",
-                  "name": "//*[@id='root']/article/header/div[1]/div/div/h1/text()",
-                  "location": "//*[@id='root']/article/header/div[1]/div/div/div/a/text()",
+                  "price": "//*[@aria-label='Cena']/text()",
+                  "name": "//*[@data-cy='adPageAdTitle']/text()",
+                  "location": "//a[@href='#map']/text()",
                   "size": "//section[@class='section-overview']//li[contains(text(),'Powierzchnia')]/strong/text()[normalize-space()]",
-                  "price_m2": "//*[@id='root']/article/header/div[2]/div[2]/div/text()",
-                  "description": "//section[@class='section-description']//div//text()",
-                  "offeror":"//*[@id='root']/article/div[1]/text()",
-                  "additional_info":"//section[@class='section-overview' or @class='section-features']//div//text()"
+                  "price_m2": "//*[@aria-label='Cena za metr kwadratowy']/text()",
+                  "description": "//*[@data-cy='adPageAdDescription']//text()",
+                  "additional_info":"//h2[contains(.,'Informacje dodatkowe')]/following::ul[1]//li//text()"
             }
       }
 }
