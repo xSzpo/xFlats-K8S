@@ -19,7 +19,7 @@ spec:
         image: xszpo/flat_scraper:1.0.17
         env:
         - name: SCRAPER_CRAWLER_NAME
-          value: 'otodom, olx, gratka, morizon'
+          value: 'otodom, olx, gratka'
         - name: JSONLINE_FILE_NAME
           value: 'flats_all'
         - name: GCP_FIRESTORE_COLLECTION
@@ -118,10 +118,10 @@ spec:
       volumes:
       - name: gcpfirestore
         secret:
-          secretName: gcp-firestore-88gkcd5h5k
+          secretName: gcp-firestore-fhcm7ht895
       - name: gcs
         secret:
-            secretName: gcp-gcs-9dc8kb67m6
+            secretName: gcp-gcs-d8gbb2mg24
       - name: telegram
         secret:
             secretName: telegram-5bb96t2mf8
