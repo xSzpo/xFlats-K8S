@@ -23,25 +23,6 @@ variable "service_account_name" {
   description = "service account - configure earlier"
 }
 
-variable "project_id" {
-  description = "project id"
-}
-
-variable "region" {
-  description = "region"
-}
-
-variable "zone" {
-  description = "zone"
-}
-
-provider "google" {
-  credentials = file("/Users/xszpo/secrets/gcp/terraform-coastal-stone-28f786ffe859.json")
-  project = var.project_id
-  region  = var.region
-  zone = var.zone
-}
-
 resource "google_container_cluster" "primary" {
   name     = "${var.project_id}-gke"
   location = var.zone
