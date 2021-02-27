@@ -9,14 +9,14 @@ required but highly recommended to keep your GKE cluster isolated.
 
 ## Install and configure GCloud
 
-First, install the [Google Cloud CLI](https://cloud.google.com/sdk/docs/quickstarts) 
+First, install the [Google Cloud CLI](https://cloud.google.com/sdk/docs/quickstarts)
 and initialize it.
 
 ```shell
 $ gcloud init
 ```
 
-Once you've initialized gcloud (signed in, selected project), add your account 
+Once you've initialized gcloud (signed in, selected project), add your account
 to the Application Default Credentials (ADC). This will allow Terraform to access
 these credentials to provision resources on GCloud.
 
@@ -26,12 +26,12 @@ $ gcloud auth application-default login
 
 ## Initialize Terraform workspace and provision GKE Cluster
 
-Replace `terraform.tfvars` values with your `project_id` and `region`. Your 
-`project_id` must match the project you've initialized gcloud with. To change your 
+Replace `terraform.tfvars` values with your `project_id` and `region`. Your
+`project_id` must match the project you've initialized gcloud with. To change your
 `gcloud` settings, run `gcloud init`. The region has been defaulted to `us-central1`;
 you can find a full list of gcloud regions [here](https://cloud.google.com/compute/docs/regions-zones).
 
-After you've done this, initalize your Terraform workspace, which will download 
+After you've done this, initalize your Terraform workspace, which will download
 the provider and initialize it with the values provided in the `terraform.tfvars` file.
 
 ```shell
@@ -71,7 +71,7 @@ region = us-central1
 
 ## Configure kubectl
 
-To configure kubetcl, by running the following command. 
+To configure kubetcl, by running the following command.
 
 ```shell
 $ gcloud container clusters get-credentials dos-terraform-edu-gke --region us-central1
@@ -84,7 +84,7 @@ and [Region](https://github.com/hashicorp/learn-terraform-provision-gke-cluster/
 
 ## Deploy and access Kubernetes Dashboard
 
-To deploy the Kubernetes dashboard, run the following command. This will schedule 
+To deploy the Kubernetes dashboard, run the following command. This will schedule
 the resources necessary for the dashboard.
 
 ```shell
@@ -117,7 +117,7 @@ able to access the Kubernetes dashboard at [http://127.0.0.1:8001/api/v1/namespa
 
 ## Authenticate to Kubernetes Dashboard
 
-To view the Kubernetes dashboard, you need to provide an authorization token. 
+To view the Kubernetes dashboard, you need to provide an authorization token.
 Authenticating using `kubeconfig` is **not** an option. You can read more about
 it in the [Kubernetes documentation](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/#accessing-the-dashboard-ui).
 
@@ -131,7 +131,7 @@ Namespace:    kube-system
 Labels:       <none>
 Annotations:  kubernetes.io/service-account.name: service-controller
               kubernetes.io/service-account.uid: bc99ddad-6be7-11ea-a3c7-42010a800017
-              
+
 Type:  kubernetes.io/service-account-token
 
 Data
@@ -141,7 +141,6 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9...
 ca.crt:     1119 bytes
 ```
 
-Select "Token" then copy and paste the entire token you receive into the 
-[dashboard authentication screen](http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/) 
+Select "Token" then copy and paste the entire token you receive into the
+[dashboard authentication screen](http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/)
 to sign in. You are now signed in to the dashboard for your Kubernetes cluster.
-

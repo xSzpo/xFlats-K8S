@@ -314,7 +314,7 @@ class SpiderFlatMorizon(scrapy.Spider):
         yield tmp
 
 
-class SpiderPlotSprzedajemy(scrapy.Spider):
+class Spiderprzedajemy(scrapy.Spider):
 
     def __init__(self):
         super().__init__()

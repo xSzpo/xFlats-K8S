@@ -18,6 +18,8 @@ NEWSPIDER_MODULE = 'scraper.spiders'
 LOG_LEVEL = 'INFO'
 LOG_FORMATTER = 'helpers.base.PoliteLogFormatter'
 FEED_EXPORT_ENCODING = "UTF-8"
+LOCAL_SECRETS = "/Users/xszpo/secrets/gcp"
+
 
 ################
 # CRAWL SETTINGS
@@ -57,7 +59,7 @@ BUCKET_NAME = 'mojewiadroxszpo'
 
 # GCP Firestore
 COLLECTION = 'flats'
-SECRETS_PATH = "/Users/xszpo/secrets/rising-woods-291513/gcpfirestore_key.json"
+SECRETS_PATH = f"{LOCAL_SECRETS}/gcpfirestore_key.json"
 FIRESTORE_KEYS_MOVE_2_MORE = ['body']
 FIRESTORE_STR2DATE = ['download_date', 'date_created', 'date_modified']
 
@@ -71,7 +73,7 @@ ADDDATE2NAME = True
 SCHEMA_FILE_NAME = 'schema_plot.json'
 
 # schema
-TELEGRAM_KEY_PATH = "/Users/xszpo/secrets/rising-woods-291513//telegram_key.json"
+TELEGRAM_KEY_PATH = f"{LOCAL_SECRETS}/telegram_key.json"
 TELEGRAM_FLATS_KEYWORDS = ""
 TELEGRAM_FLATS_QUERY = ""
 TELEGRAM_PLOTS_KEYWORDS = "rzek.|brzeg|jeziorem|jezioro|jeziorami|pla.z|zalew|narew|narwi|bug|wkr.|wisl|zegrz"

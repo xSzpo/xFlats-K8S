@@ -1,7 +1,8 @@
 {
       "otodom": {
             "start_urls": [
-                  "https://www.otodom.pl/sprzedaz/mieszkanie/warszawa/?search%5Border%5D=created_at_first%3Adesc"
+                  "https://www.otodom.pl/sprzedaz/mieszkanie/warszawa/?search%5Border%5D=created_at_first%3Adesc",
+                  "https://www.otodom.pl/sprzedaz/zakopane/?search[order]=created_at_first:desc"
             ],
             "list_page_start_xpath": "//div[@class='col-md-content section-listing__row-content']//article[starts-with(@class,'offer-item ad')]",
             "list_page_iter_xpaths": {
@@ -29,7 +30,8 @@
       },
       "olx": {
             "start_urls": [
-                  "https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/warszawa/?search%5Border%5D=created_at%3Adesc"
+                  "https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/warszawa/?search%5Border%5D=created_at%3Adesc",
+                  "https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/zakopane/?search%5Border%5D=created_at%3Adesc"
             ],
             "url": "//a[contains(@href,'www.olx.pl/oferta')]/@href",
             "next_page_css": "span.fbold.next.abs.large a::attr(href)",
@@ -51,11 +53,12 @@
             }
       },
       "gratka": {"start_urls": [
-                  "https://gratka.pl/nieruchomosci/mieszkania/warszawa/sprzedaz?sort=newest"
+                  "https://gratka.pl/nieruchomosci/mieszkania/warszawa/sprzedaz?sort=newest",
+                  "https://gratka.pl/nieruchomosci/mieszkania/zakopane/sprzedaz?sort=newest"
             ],
             "url_old":"//a[contains(@href,'gratka.pl/nieruchomosci/') and (@class='teaser__anchor' or @class='recommendedOffers__imgBox')]//@href",
-            "url":"//article[contains(@class,'teaserEstate')]/@data-href",
-            "main_page_date_modified":"//article[contains(@class,'teaserEstate')]//li[@class='teaserEstate__info']/text()[contains(.,'Aktualizacja:')]",
+            "url":"//article[contains(@class,'teaserUnified')]/@data-href",
+            "main_page_date_modified":"//article[contains(@class,'teaserUnified')]//li[@class='teaserUnified__info']/text()[contains(.,'Aktualizacja:')]",
             "next_page": "//a[@class='pagination__nextPage']/@href",
             "article_page_iter_xpaths": {
                   "price": "translate(//span[@class='priceInfo__value']/text()[normalize-space()],'\t\n','')",
@@ -76,7 +79,8 @@
       },
       "morizon": {
             "start_urls": [
-                  "https://www.morizon.pl/mieszkania/najnowsze/warszawa/"
+                  "https://www.morizon.pl/mieszkania/najnowsze/warszawa/",
+                  "https://www.morizon.pl/mieszkania/najnowsze/zakopane/"
             ],
             "url": "//a[contains(@href,'www.morizon.pl/oferta/')]/@href",
             "next_page": "//a[contains(@class,'mz-pagination-number__btn--next')]/@href",
@@ -164,8 +168,8 @@
             "start_urls": [
                   "https://gratka.pl/nieruchomosci/dzialki-grunty?sort=newest"
             ],
-            "url":"//article[contains(@class,'teaserEstate')]/@data-href",
-            "main_page_date_modified":"//article[contains(@class,'teaserEstate')]//li[@class='teaserEstate__info']/text()[contains(.,'Aktualizacja:')]",
+            "url":"//article[contains(@class,'teaserUnified')]/@data-href",
+            "main_page_date_modified":"//article[contains(@class,'teaserUnified')]//li[@class='teaserUnified__info']/text()[contains(.,'Aktualizacja:')]",
             "next_page": "//a[@class='pagination__nextPage']/@href",
             "article_page_iter_xpaths": {
                   "price": "translate(//span[@class='priceInfo__value']/text()[normalize-space()],'\t\n','')",
