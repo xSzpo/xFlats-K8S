@@ -1,3 +1,94 @@
+# Sources
+* https://cloud.google.com/blog/products/data-analytics/introducing-the-bigquery-terraform-module
+* https://learn.hashicorp.com/tutorials/terraform/gke
+* https://github.com/gruntwork-io/terraform-google-gke/blob/master/examples/gke-public-cluster/main.tf
+
+# Prerequisites
+
+
+1. Download the Terraform binary that matches your system type and Terraform installation process.
+
+2. Install Google Cloud SDK on your local machine.
+
+3. Prepare GCP SA and roles
+Zmodyfikuj plik z konfiguracja `config_terraform` i skopiuj go do `~/.config/gcloud/configurations/`
+`cp config_terraform ~/.config/gcloud/configurations/`
+`gcloud config configurations list`
+`gcloud config configurations activate terraform`
+
+Złap project ID
+`read PROJECT_ID < <(gcloud config get-value project)`
+`export SA_ID=terraform-sa`
+`export SA_EMAIL=$SA_ID@$PROJECT_ID.iam.gserviceaccount.com`
+
+Aktywuj api BQ
+`gcloud services enable bigquery-json.googleapis.com`
+
+Utworz konto serwisowe
+`gcloud iam service-accounts create $SA_ID --display-name $SA_ID`
+
+Nadaj uprawnienia
+`
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+ --member serviceAccount:$SA_EMAIL\
+ --role roles/bigquery.dataOwner \
+ --user-output-enabled false
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+ --member serviceAccount:$SA_EMAIL\
+ --role roles/compute.instanceAdmin.v1 \
+ --user-output-enabled false
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+ --member serviceAccount:$SA_EMAIL\
+ --role roles/compute.serviceAgent \
+ --user-output-enabled false
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+ --member serviceAccount:$SA_EMAIL\
+ --role roles/container.admin \
+ --user-output-enabled false
+
+ gcloud projects add-iam-policy-binding $PROJECT_ID \
+ --member serviceAccount:$SA_EMAIL\
+ --role roles/container.serviceAgent \
+ --user-output-enabled false
+
+ gcloud projects add-iam-policy-binding $PROJECT_ID \
+ --member serviceAccount:$SA_EMAIL\
+ --role roles/firebase.admin \
+ --user-output-enabled false
+
+ gcloud projects add-iam-policy-binding $PROJECT_ID \
+ --member serviceAccount:$SA_EMAIL\
+ --role roles/storage.admin \
+ --user-output-enabled false
+
+ gcloud projects add-iam-policy-binding $PROJECT_ID \
+ --member serviceAccount:$SA_EMAIL\
+ --role roles/bigquery.jobUser \
+ --user-output-enabled false
+`
+
+Sprawdz uprawnienia
+
+gcloud projects get-iam-policy $PROJECT_ID \
+--flatten="bindings[].members" \
+--format='table(bindings.role)' \
+--filter="bindings.members:$SA_EMAIL"
+
+
+Pobierz klucz
+gcloud iam service-accounts keys create ~/secrets/gcp/$SA_ID.json \
+ --iam-account $SA_EMAIL \
+ --project $PROJECT_ID
+
+ Zapisz gdzie jest klucz:
+~/secrets/gcp/terraform-sa.json
+
+upewnij sie, ze poprawna sciezka jest w pliki main.tf
+
+
 # Learn Terraform - Provision a GKE Cluster
 
 This repo is a companion repo to the [Provision a GKE Cluster learn guide](https://learn.hashicorp.com/terraform/kubernetes/provision-gke-cluster), containing

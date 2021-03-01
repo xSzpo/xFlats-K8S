@@ -1,6 +1,11 @@
 ### OSX ###
 *.DS_Store
 
+# terraform
+terraform/.terraform/*
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate*
+
 # Icon must end with two \r
 Icon
 
