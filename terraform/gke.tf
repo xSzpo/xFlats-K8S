@@ -18,9 +18,9 @@ variable "gke_nodes_machine" {
   description = "nodes machine type"
 }
 
-variable "service_account_name" {
-  default     = "xflats-app@coastal-stone.iam.gserviceaccount.com"
-  description = "service account - configure earlier"
+variable "terraform-sa" {
+  default     = "terraform-sa"
+  description = "service account prefix - configure earlier"
 }
 
 resource "google_container_cluster" "primary" {
@@ -71,7 +71,7 @@ resource "google_container_node_pool" "primary_nodes" {
     disk_size_gb = "30"
     disk_type    = "pd-standard"
     preemptible  = false
-    service_account = var.service_account_name
+    service_account = "terraform-sa@${var.project_id}.iam.gserviceaccount.com"
 
     # preemptible  = true
     machine_type = var.gke_nodes_machine

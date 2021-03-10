@@ -21,11 +21,11 @@ resource "local_file" "foo" {
 }
 
 output "google_storage_bucket_flats" {
-  value       = google_storage_bucket.flats.name
+  value       = "gs://${google_storage_bucket.flats.name}/"
   description = "Storage bucket"
 }
 
 output "google_storage_bucket_plots" {
-  value       = google_storage_bucket.plots.name
+  value       = "gs://${google_storage_bucket.plots.name}/"
   description = "Storage bucket"
 }

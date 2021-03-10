@@ -1,3 +1,11 @@
+# Orfder
+
+1. preprare Prerequisites
+2. run terraform:`terraform init & terraform apply`
+3. Copy data to cloud storage
+4. Load data to bq by running `run_after_tf.sh`
+
+
 # Sources
 * https://cloud.google.com/blog/products/data-analytics/introducing-the-bigquery-terraform-module
 * https://learn.hashicorp.com/tutorials/terraform/gke
@@ -23,6 +31,11 @@ Złap project ID
 
 Aktywuj api BQ
 `gcloud services enable bigquery-json.googleapis.com`
+`gcloud services enable container.googleapis.com`
+
+Aktywuj k8s api
+`gcloud services enable bigquery-json.googleapis.com`
+
 
 Utworz konto serwisowe
 `gcloud iam service-accounts create $SA_ID --display-name $SA_ID`

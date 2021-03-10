@@ -1,4 +1,5 @@
-project_id = "coastal-stone"
+project_id = "trim-silicon-307221"
+sa_name    = "terraform-sa"
 region     = "europe-west3"
 gcs_region = "EUROPE-WEST3"
 zone     = "europe-west3-a"

@@ -1,11 +1,8 @@
 [core]
-account = daniel.szponar@gmail.com
-project = coastal-stone
+account = xszpo01@gmail.com
+project = trim-silicon-307221
 disable_usage_reporting = False
 
 [compute]
 zone = europe-west3-a
 region = europe-west3
-
-[container]
-
