@@ -118,10 +118,10 @@ spec:
       volumes:
       - name: gcpfirestore
         secret:
-          secretName: gcp-firestore-fhcm7ht895
+          secretName: gcp-firestore-f4htccd786
       - name: gcs
         secret:
-            secretName: gcp-gcs-d8gbb2mg24
+            secretName: gcp-gcs-hhdd264h2f
       - name: telegram
         secret:
             secretName: telegram-5bb96t2mf8
