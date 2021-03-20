@@ -74,6 +74,10 @@ spec:
         env:
         - name: LUIGI_DAYSBACK
           value: '15'
+        - name: LUIGI_BUCKET
+          value: 'gs://trim-silicon-307221-flats/'
+        - name: LUIGI_BUCKET_PLOTS
+          value: 'gs://trim-silicon-307221-plots/'
         envFrom:
           - configMapRef:
               name: env-config-luigi

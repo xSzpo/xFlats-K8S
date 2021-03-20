@@ -19,9 +19,7 @@ data:
   GOOGLE_APPLICATION_CREDENTIALS: "/etc/gcs/gcs_key.json"
   GCP_FIRESTORE_SECRETS_PATH: "/etc/gcpfirestore/gcpfirestore_key.json"
   TELEGRAM_KEY_PATH: "/etc/telegram/telegram_key.json"
-  LUIGI_BUCKET: 'gs://trim-silicon-307221-flats/'
   LUIGI_LOCALDIR: '/app/data/'
-  LUIGI_BUCKET_PLOTS: 'gs://trim-silicon-307221-plots/'
   LUIGI_LOCALDIR_PLOTS: '/app/data_plots/'
 ---
 apiVersion: v1

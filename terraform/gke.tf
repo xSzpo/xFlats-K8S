@@ -13,6 +13,11 @@ variable "gke_num_nodes" {
   description = "number of gke nodes"
 }
 
+variable "gke_disk_size_gb" {
+  default = "30"
+  description = "gke disk size"
+}
+
 variable "gke_nodes_machine" {
   default     = "n1-standard-4"
   description = "nodes machine type"
@@ -68,10 +73,10 @@ resource "google_container_node_pool" "primary_nodes" {
       env = var.project_id
     }
 
-    disk_size_gb = "30"
+    disk_size_gb = var.gke_disk_size_gb
     disk_type    = "pd-standard"
     preemptible  = false
-    service_account = "terraform-sa@${var.project_id}.iam.gserviceaccount.com"
+    service_account = "${var.terraform-sa}@${var.project_id}.iam.gserviceaccount.com"
 
     # preemptible  = true
     machine_type = var.gke_nodes_machine

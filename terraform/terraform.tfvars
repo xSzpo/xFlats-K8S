@@ -4,9 +4,13 @@ region     = "europe-west3"
 gcs_region = "EUROPE-WEST3"
 zone     = "europe-west3-a"
 
+# GKE
+gke_num_nodes = 1
+gke_nodes_machine = "n1-standard-4"
+terraform-sa = "terraform-sa"
+gke_disk_size_gb = "30"
 
 # BQ
-#Time that
 time_partitioning = "DAY"
 dataset_id = "xflats"
 dataset_name = "xflats"

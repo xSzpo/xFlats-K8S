@@ -1,0 +1,9 @@
+[x] terraform for firestore
+[x] create firestore sa
+[x] create gcs sa
+[] pack and uncpack data,
+[] load data to BQ
+[] build notebook image for AI Platform Notebook
+[] build ml model for price assesing
+[] deploy it on GKE and use in projct
+[] send notyfikaction about flat prices,

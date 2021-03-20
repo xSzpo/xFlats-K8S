@@ -1,57 +1,81 @@
-# xFlat on Kubernetes and GCP [in progress]
+# xFlat on Kubernetes and GCP
+
+# Overview
+
+Monitoring and assessment system for housing market.
+It looks for new offers of houses and plots within 15 minutes intervals.
+sFlats utilizes GCP cloud solutions and Kubernetes.
+An on-prem version, build with different technologies is available [here](https://github.com/xSzpo/xFlats).
+
+In progres:
+* flats price assesment (ml model with Rest Api)
+
+Keywords:
+`scraper`, `scrapy`, `python`, `firestore`, `redis`, `luigi`, `rest api`, `xgboost`, `telegram`,
+
+</br>
 
 
-**Monitoring and assessment system for flats offers that are put up for sale in Warsaw.**
-
-A service that monitor flats sale offers.
-When offer came out, system asses its market value and if the price is attractive sends a message to a user via Telegram messenger.
+## Start
+Autorize cloud sdk: `gcloud auth login` or `gcloud auth application-default login`.
 
 
-Keywords
-scraper, scrapy, python, kafka, nifi, mongodb, rest api, ml model, xgboost, fastapi, K8S, kubernetes
+## Setup infrastructure and deploy app
+</br>
 
-## commends
+### Infrastructure - Terraform
+</br>
 
-### GCP
+Create service accounts, GKE cluster, GCS buckets, Firestore DB, BQ Wharehouse, using terraform scripts from `./terraform`. Details are described in `README.md` file.
 
-create cluster
+</br>
+
+### Deploy on GKE
+
+
+1. Modify file kustomization.yaml (uncomment disk creation od GCP, comment disk creation on local env).
+
+2. Create secrets, config maps, create volumes.
 ```
-gcloud beta container --project "flats-272715" clusters create "xszpo2" --zone "us-east1-b" --no-enable-basic-auth --release-channel "rapid" --machine-type "g1-small" --image-type "COS" --disk-type "pd-standard" --disk-size "30" --node-labels app=xflats --metadata disable-legacy-endpoints=true --scopes "https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" --num-nodes "3" --no-enable-stackdriver-kubernetes --enable-ip-alias --network "projects/flats-272715/global/networks/default" --subnetwork "projects/flats-272715/regions/us-east1/subnetworks/default" --default-max-pods-per-node "110" --no-enable-master-authorized-networks --addons HorizontalPodAutoscaling,HttpLoadBalancing --enable-autoupgrade --enable-autorepair
-```
-
-ssh
-```
-gcloud beta compute ssh --zone "us-east1-b" "gke-xszpo3-default-pool-15de7478-jtlx" --project "flats-27
-2715" --local-host-port=localhost:8080
-```
-
-up
-```
-# bedfore start modify kustomization.yaml (uncomment disk creation od GCP, comment dick creation on local)
 kubectl apply -k .
-kubectl apply -f deployment_gcp.yaml
+```
 
-### Local
-# bedfore start modify kustomization.yaml (comment disk creation od GCP, uncomment dick creation on local)
-kubectl apply -k .
-kubectl apply -f deployment_gcp.yaml
+2. Update values in `deployment_gcp.yaml`:
+* bucket names `LUIGI_BUCKET`, `LUIGI_BUCKET_PLOTS`,
+* secret names (you can get it usuing `kubectl get secrets`) ex. `secretName: telegram-5bb96t2mf8`,
+* persistance volumes claim names: ex. `claimName: pv-gcp-scraper-plots-claim`
 
-### All
+
+3. Deploy on GCP:
+```
+kubectl apply -f deployment_gcp.yaml
+```
+
+</br>
+
+### Deploy localy
+
+Modify file `kustomization.yaml` (comment disk creation od GCP, uncomment disk creation on local env).
+
+The rest is similar as in previouse sections.
+
+</br>
+
+### Cheatsheet
 
 scale
 ```
-kubectl scale deploy xflats --replicas=0
+kubectl scale deploy `cluster name` --replicas=0
 ```
 
-copy from pod
+copy from/to container
 ```
 kubectl cp default/xflats-58695565f8-rkj9l:/data/redis/redis_dump.rdb redis_dump.rdb -c redis
 
 kubectl cp redis_dump.rdb default/xflats-597995dd96-9mwzr:/data/redis/redis_dump.rdb
 ```
 
-DLA NOWEGO konta GOOGLE:
-
-1. Dodaj konto daniel.szponar@gmail.com (kliknij autoryzacje na poczcie)
-2. Po wykonaniu `kubectl apply -k .` pobierz nazwy secretow i zmień secretName w pliku deployment_gcp.yaml
-3.
+log into container
+``
+kubectl exec -it xflats-664bdcbc5b-l8m9s -c luigi /bin/sh
+``
