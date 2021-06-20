@@ -33,23 +33,20 @@
                   "https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/warszawa/?search%5Border%5D=created_at%3Adesc",
                   "https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/zakopane/?search%5Border%5D=created_at%3Adesc"
             ],
-            "url": "//a[contains(@href,'www.olx.pl/oferta')]/@href",
+            "url": "//div[@class='offer-wrapper']//a[contains(@href,'www.olx.pl')]/@href",
             "next_page_css": "span.fbold.next.abs.large a::attr(href)",
             "article_page_iter_xpaths": {
-                  "tracking_id": "//ul[@class='offer-bottombar__items']//li[contains(text(),'ID ogłoszenia')]/strong/text()",
-                  "price": "normalize-space(//div[@class='pricelabel']/strong/text())",
-                  "name": "normalize-space(//div[@class='offer-titlebox']/h1/text())",
-                  "location": "translate(//div[@class='offer-user__address']/address//text()[normalize-space()],'\t\n','')",
-                  "flat_size": "//span[@class='offer-details__name' and contains(text(),'Powierzchnia')]/ancestor::li//strong[@class='offer-details__value']//text()",
-                  "rooms": "//span[@class='offer-details__name' and contains(text(),'Liczba pokoi')]/ancestor::li//strong[@class='offer-details__value']//text()",
-                  "floor": "//span[@class='offer-details__name' and contains(text(),'Poziom')]/ancestor::li//strong[@class='offer-details__value']//text()",
-                  "price_m2": "//span[@class='offer-details__name' and contains(text(),'Cena za m')]/ancestor::li//strong[@class='offer-details__value']//text()",
-                  "market": "//span[@class='offer-details__name' and contains(text(),'Rynek')]/ancestor::li//strong[@class='offer-details__value']//text()",
-                  "building_type": "//span[@class='offer-details__name' and contains(text(),'Rodzaj zabudowy')]/ancestor::li//strong[@class='offer-details__value']//text()",
-                  "description": "//div[contains(@class,'clr') and @id='textContent']//text()[normalize-space()]",
-                  "additional_info": "//ul[@class='offer-details']//text()",
-                  "offeror": "//span[@class='offer-details__name' and contains(text(),'Oferta od')]/ancestor::li//strong[@class='offer-details__value']//text()",
-                  "date_created": "//ul[@class='offer-bottombar__items']//li[contains(text(),'Dodane')]//strong/text()"
+                  "tracking_id": "//span[contains(@class, 'css-9xy3gn-Text')]//text()[2]",
+                  "price": "//h3[contains(@class,'css-8kqr5l-Text')]//text()[1]",
+                  "name": "//h1[contains(@class,'css-1oarkq2-Text')]//text()",
+                  "flat_size": "//ul[@class='css-sfcl1s']//p[contains(text(),'Powierzchnia')]//text()",
+                  "rooms": "//ul[@class='css-sfcl1s']//p[contains(text(),'Liczba pokoi')]//text()",
+                  "floor": "//ul[@class='css-sfcl1s']//p[contains(text(),'Poziom')]//text()",
+                  "price_m2": "//ul[@class='css-sfcl1s']//p[contains(text(),'Cena za m')]//text()",
+                  "market": "//ul[@class='css-sfcl1s']//p[contains(text(),'Rynek')]//text()",
+                  "building_type": "//ul[@class='css-sfcl1s']//p[contains(text(),'Rodzaj zabudowy')]//text()",
+                  "description": "//div[@class='css-g5mtbi-Text']//text()[normalize-space()]",
+                  "additional_info": "//ul[@class='css-sfcl1s']//text()"
             }
       },
       "gratka": {"start_urls": [

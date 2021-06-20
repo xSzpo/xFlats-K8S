@@ -1,8 +1,8 @@
-project_id = "trim-silicon-307221"
+project_id = "gentle-current-314616"
 sa_name    = "terraform-sa"
-region     = "europe-west3"
-gcs_region = "EUROPE-WEST3"
-zone     = "europe-west3-a"
+region     = "europe-central2"
+gcs_region = "EUROPE-CENTRAL2"
+zone     = "europe-central2-a"
 
 # GKE
 gke_num_nodes = 1

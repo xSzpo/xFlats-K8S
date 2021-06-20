@@ -201,11 +201,11 @@ class Geodata:
     @staticmethod
     def get_geodata_olx(content):
 
-        pattern = "data-lat.{2}[\d]{2}.[\d]{8}."
+        pattern = '{.zoom..\d+,.lat..\d{2}.\d+..lon..\d{2}.\d+..radius'
         if re.search(pattern, content.decode("utf-8")):
-            data_lat = re.findall("data-lat.{2}[\d]{2}.[\d]{8}.", content.decode("utf-8"))[0]
+            data_lat = re.findall("lat..\d{2}.\d+.", content.decode("utf-8"))[0]
             data_lat = "".join([i for i in data_lat if i.isdigit() or i == "."])
-            data_lon = re.findall("data-lon.{2}[\d]{2}.[\d]{8}.", content.decode("utf-8"))[0]
+            data_lon = re.findall("lon..\d{2}.\d+", content.decode("utf-8"))[0]
             data_lon = "".join([i for i in data_lon if i.isdigit() or i == "."])
             geocoordinates = {"latitude": data_lat, "longitude": data_lon}
             return geocoordinates

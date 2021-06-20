@@ -4,7 +4,7 @@
 
 Monitoring and assessment system for housing market.
 It looks for new offers of houses and plots within 15 minutes intervals.
-sFlats utilizes GCP cloud solutions and Kubernetes.
+xFlats utilizes GCP cloud solutions and Kubernetes.
 An on-prem version, build with different technologies is available [here](https://github.com/xSzpo/xFlats).
 
 In progres:

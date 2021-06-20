@@ -11,7 +11,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/Users/xszpo/GoogleDrive/01_Projects/202003_xFlats_K8S/pv_k8s/scraper"
+    path: "/Users/danielszponar/GoogleDrive/01_Projects/202003_xFlats_K8S/pv_k8s/scraper"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -38,7 +38,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/Users/xszpo/GoogleDrive/01_Projects/202003_xFlats_K8S/pv_k8s/scraper_plots"
+    path: "/Users/danielszponar/GoogleDrive/01_Projects/202003_xFlats_K8S/pv_k8s/scraper_plots"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -65,7 +65,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/Users/xszpo/GoogleDrive/01_Projects/202003_xFlats_K8S/pv_k8s/redis"
+    path: "/Users/danielszponar/GoogleDrive/01_Projects/202003_xFlats_K8S/pv_k8s/redis"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

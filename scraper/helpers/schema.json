@@ -5,7 +5,7 @@
         "tracking_id": {"type": ["string"]},
         "price": {"type": "number",  "minimum": 0, "maximum": 10000000},
         "name": {"type": "string"},
-        "location": {"type": "string"},
+        "location": {"type": ["string", "null"]},
         "flat_size": {"type": "integer"},
         "rooms": {"type": ["integer","null"],  "minimum": 0, "maximum": 10},
         "floor": {"type": ["integer","null"], "minimum": 0, "maximum": 100},
@@ -39,7 +39,7 @@
         "GC_addr_country_code": {"type": ["string", "null"]},
         "prediction": {"type": "number"}
     },
-    "required": ["_id","name","location","flat_size","floor","price",
+    "required": ["_id","name","flat_size","floor","price",
         "tracking_id","url", "producer_name","price_m2","building_type",
         "description","number_of_floors","year_of_building","download_date",
         "download_date_utc", "GC_latitude", "GC_longitude", "GC_addr_road",

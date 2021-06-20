@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: scraper-flats
-        image: xszpo/flat_scraper:1.0.18
+        image: xszpo/flat_scraper:1.0.20
         env:
         - name: SCRAPER_CRAWLER_NAME
           value: 'otodom, olx, gratka'
@@ -25,7 +25,7 @@ spec:
         - name: GCP_FIRESTORE_COLLECTION
           value: flats
         - name: SCRAPER_CRAWL_LIST_PAGES
-          value: '2'
+          value: '100'
         envFrom:
           - configMapRef:
               name: env-config
@@ -43,7 +43,7 @@ spec:
             cpu: "100m"
             memory: "256Mi"
       - name: scraper-plots
-        image: xszpo/flat_scraper:1.0.18
+        image: xszpo/flat_scraper:1.0.19
         env:
         - name: SCRAPER_CRAWLER_NAME
           value: 'plot_sprzedajemy, plot_gumtree, plot_olx, plot_gratka, plot_otodom'
@@ -75,9 +75,9 @@ spec:
         - name: LUIGI_DAYSBACK
           value: '15'
         - name: LUIGI_BUCKET
-          value: 'gs://trim-silicon-307221-flats/'
+          value: 'gs://gentle-current-314616-flats/'
         - name: LUIGI_BUCKET_PLOTS
-          value: 'gs://trim-silicon-307221-plots/'
+          value: 'gs://gentle-current-314616-plots/'
         envFrom:
           - configMapRef:
               name: env-config-luigi
@@ -122,10 +122,10 @@ spec:
       volumes:
       - name: gcpfirestore
         secret:
-          secretName: gcp-firestore-f4htccd786
+          secretName: gcp-firestore-6765d52h6m
       - name: gcs
         secret:
-            secretName: gcp-gcs-hhdd264h2f
+            secretName: gcp-gcs-28t8b84bgb
       - name: telegram
         secret:
             secretName: telegram-5bb96t2mf8

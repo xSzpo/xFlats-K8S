@@ -5,6 +5,7 @@ import logging
 import re
 import zlib
 import base64
+import unidecode
 from scrapy.exceptions import DropItem
 from dateutil.parser import parse
 from helpers.base import Scraper
@@ -139,9 +140,11 @@ class SpiderFlatOlx(scrapy.Spider):
         tmp['description'] = "\n".join(response.xpath(
             self.article_page_iter_xpaths['description']).getall())
         tmp['geo_coordinates'] = Geodata.get_geodata_olx(response.body)
-        tmp['date_created'] = Scraper.\
-            get_createdate_polish_months(tmp['date_created'])
-        tmp['date_modified'] = None
+
+        tmp['date_created'] = None
+        tmp['date_modified'] = Scraper.searchregex(
+            response.body.decode("utf-8"), r'.lastRefreshTime...(\d{4}-\d{2}-\d{2})', group=1)
+
         tmp['url'] = response.url
         tmp['producer_name'] = self.name
         tmp['main_url'] = self.start_urls[0]
@@ -151,8 +154,12 @@ class SpiderFlatOlx(scrapy.Spider):
 
         reg = (r"(oddan\w+|inwestyc\w+|odbi.r\w+|rok\s+budow\w+|blok\w+|" +
                r"dom\w+|kamienic\w+|budyn\w+)[\w\S ]*(1[89]\d\d|20\d\d)")
+
         tmp['year_of_building'] = Scraper.searchregex(
             tmp['description'].lower(), reg, group=2)
+
+        tmp['location'] = Scraper.searchregex(unidecode.unidecode(response.body.decode("utf-8")), 
+            r'"pathName":"([a-zA-Z, ]+)"}', group=1)
 
         #zlib.decompress(base64.b64decode(x))
         tmp['body'] = base64.b64encode(zlib.compress(response.body)).decode()
@@ -187,12 +194,10 @@ class SpiderFlatGratka(scrapy.Spider):
     def parse(self, response):
 
         urls = response.xpath(self.list_page_url).getall()
-        dates_upd = response.xpath(self.list_date_modified).getall()
 
-        for i, url in enumerate([i for i in zip(urls, dates_upd)]):
+        for url in urls:
 
-            yield scrapy.Request(url[0], callback=self.parse_dir_contents,
-                                 cb_kwargs=dict(date_modified=url[1]))
+            yield scrapy.Request(url, callback=self.parse_dir_contents)
 
         # after you crawl each offer in current page go to the next page
         next_page = response.xpath(self.next_page).get()
@@ -205,7 +210,7 @@ class SpiderFlatGratka(scrapy.Spider):
             self.pageCounter += 1
             yield response.follow(next_page, callback=self.parse)
 
-    def parse_dir_contents(self, response, date_modified):
+    def parse_dir_contents(self, response):
 
         tmp = {}
 
@@ -225,9 +230,8 @@ class SpiderFlatGratka(scrapy.Spider):
         tmp['offeror'] = None
 
         tmp['date_created'] = None
-        tmp['date_modified'] = Scraper.searchregex(
-            date_modified, r"\d\d.[01]\d.20\d\d", group=0)
-        tmp['date_modified'] = parse(tmp['date_modified'], dayfirst=True)
+        tmp['date_modified'] = None
+        tmp['date_modified'] = None
 
         tmp['url'] = response.url
         tmp['producer_name'] = self.name

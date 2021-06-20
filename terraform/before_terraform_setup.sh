@@ -4,6 +4,8 @@ echo ">>copy config_terraform and activate it"
 cp config_terraform ~/.config/gcloud/configurations/
 gcloud config configurations activate terraform
 
+read -p "Modify file 'terraform.tfvars' with project details i press enter"
+
 echo ">>set up variables"
 export PROJECT_ID=$(gcloud config get-value project| tail -1)
 export SA_ID=terraform-sa

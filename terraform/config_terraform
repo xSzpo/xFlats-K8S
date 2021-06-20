@@ -1,8 +1,8 @@
 [core]
-account = xszpo01@gmail.com
-project = trim-silicon-307221
+account = xszpo02@gmail.com
+project = gentle-current-314616
 disable_usage_reporting = False
 
 [compute]
-zone = europe-west3-a
-region = europe-west3
+zone = europe-central2-a
+region = europe-central2

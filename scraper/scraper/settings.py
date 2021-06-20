@@ -18,7 +18,7 @@ NEWSPIDER_MODULE = 'scraper.spiders'
 LOG_LEVEL = 'INFO'
 LOG_FORMATTER = 'helpers.base.PoliteLogFormatter'
 FEED_EXPORT_ENCODING = "UTF-8"
-LOCAL_SECRETS = "/Users/xszpo/secrets/gcp"
+LOCAL_SECRETS = "/Users/danielszponar/GoogleDrive/01_Projects/202003_xFlats_K8S/secrets"
 
 
 ################
@@ -30,7 +30,7 @@ ROBOTSTXT_OBEY = True
 CONCURRENT_REQUESTS = 1
 DOWNLOAD_DELAY = 3
 LOGSTATS_INTERVAL = 0
-CRAWL_LIST_PAGES = 999  # how many pages with links ]to crawl (start pages)
+CRAWL_LIST_PAGES = 2  # how many pages with links ]to crawl (start pages)
 
 
 ###################
@@ -65,7 +65,7 @@ FIRESTORE_STR2DATE = ['download_date', 'date_created', 'date_modified']
 
 # local
 
-LOCAL_FILE_DIR = "/Users/xszpo/GoogleDrive/01_Projects/202003_xFlats_K8S/scraper/data/"
+LOCAL_FILE_DIR = "/Users/danielszponar/GoogleDrive/01_Projects/202003_xFlats_K8S/scraper/data/"
 LOCAL_FILE_NAME = "data_nok8s_plot"
 ADDDATE2NAME = True
 
@@ -109,29 +109,10 @@ DOWNLOADER_MIDDLEWARES = {
 }
 
 USER_AGENTS = [
-    ('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 '
-     '(KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36 OPR/63.0.3368.75'),
-    ('Mozilla/5.0 (X11; Linux x86_64) '
-     'AppleWebKit/537.36 (KHTML, like Gecko) '
-     'Chrome/57.0.2987.110 '
-     'Safari/537.36'),  # chrome
-    ('Mozilla/5.0 (X11; Linux x86_64) '
-     'AppleWebKit/537.36 (KHTML, like Gecko) '
-     'Chrome/61.0.3163.79 '
-     'Safari/537.36'),  # chrome
-    ('Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) '
-     'Gecko/20100101 '
-     'Firefox/55.0'),  # firefox
-    ('Mozilla/5.0 (X11; Linux x86_64) '
-     'AppleWebKit/537.36 (KHTML, like Gecko) '
-     'Chrome/61.0.3163.91 '
-     'Safari/537.36'),  # chrome
-    ('Mozilla/5.0 (X11; Linux x86_64) '
-     'AppleWebKit/537.36 (KHTML, like Gecko) '
-     'Chrome/62.0.3202.89 '
-     'Safari/537.36'),  # chrome
-    ('Mozilla/5.0 (X11; Linux x86_64) '
-     'AppleWebKit/537.36 (KHTML, like Gecko) '
-     'Chrome/63.0.3239.108 '
-     'Safari/537.36'),  # chrome
+    ('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 '
+     '(KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'),
+    ('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 '
+     '(KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36 OPR/76.0.4017.137'),
+    ('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 '
+     '(KHTML, like Gecko) Version/14.1 Safari/605.1.15')
 ]
