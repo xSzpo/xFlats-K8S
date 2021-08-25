@@ -8,4 +8,4 @@ pytz==2019.3
 scipy==1.4.1
 mlxtend==0.17.2
 keras==2.3.1
-tensorflow==2.1.0
+tensorflow==2.5.1
