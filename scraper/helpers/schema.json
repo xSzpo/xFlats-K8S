@@ -41,7 +41,7 @@
     },
     "required": ["_id","name","flat_size","floor","price",
         "tracking_id","url", "producer_name","price_m2","building_type",
-        "description","number_of_floors","year_of_building","download_date",
+        "description","number_of_floors","download_date",
         "download_date_utc", "GC_latitude", "GC_longitude", "GC_addr_road",
         "GC_addr_neighbourhood", "GC_addr_suburb","GC_addr_city",
         "GC_addr_state", "GC_addr_postcode", "GC_addr_country",

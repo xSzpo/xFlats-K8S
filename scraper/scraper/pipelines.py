@@ -264,8 +264,8 @@ class OutputLocal:
             file_path = os.path.join(self.file_dir, self.file_name+".jsonline")
 
         file = codecs.open(file_path, 'a', encoding=self.encoding)
-        logger.info("{}: Local jsonline: save offer {}".format(producer,
-                                                               item['_id']))
+        logger.info("{}: Local jsonline: save offer {}, url {}".format(producer,
+                                                               item['_id'],item['url']))
         line = json.dumps(dict(item), ensure_ascii=False) + "\n"
         file.write(line)
         file.close()

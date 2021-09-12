@@ -39,9 +39,11 @@ class SpiderFlatOtodom(scrapy.Spider):
     def parse(self, response):
         for i, offer in enumerate(response.xpath(self.list_page_start_xpath)):
             url = offer.xpath(self.list_page_iter_xpaths['url']).get()
-            offeror = offer.xpath(self.list_page_iter_xpaths['offeror']).get().strip()
-            yield scrapy.Request(url, callback=self.parse_dir_contents,
-                                    cb_kwargs=dict(offeror=offeror))
+            if url:
+                url = 'https://www.otodom.pl'+url
+                offeror = offer.xpath(self.list_page_iter_xpaths['offeror']).getall()[-1]
+                yield scrapy.Request(url, callback=self.parse_dir_contents,
+                                        cb_kwargs=dict(offeror=offeror))
 
         # after you crawl each offer in current page go to the next page
         next_page = response.css(self.next_page_css).get()
@@ -65,6 +67,7 @@ class SpiderFlatOtodom(scrapy.Spider):
             self.article_page_iter_xpaths['additional_info']).getall())
         tmp['description'] = "\n".join(response.xpath(
             self.article_page_iter_xpaths['description']).getall())
+
         tmp['geo_coordinates'] = Geodata.get_geodata_otodom(response.body)
 
         regex = r'"dateCreated":"(20\d\d-[01]\d-[0-3]\d [0-3]\d:[0-5]\d:' + \

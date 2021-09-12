@@ -1,13 +1,13 @@
 {
       "otodom": {
             "start_urls": [
-                  "https://www.otodom.pl/sprzedaz/mieszkanie/warszawa/?search%5Border%5D=created_at_first%3Adesc",
-                  "https://www.otodom.pl/sprzedaz/zakopane/?search[order]=created_at_first:desc"
+                  "https://www.otodom.pl/pl/oferty/sprzedaz/mieszkanie/warszawa?by=LATEST&direction=DESC",
+                  "https://www.otodom.pl/pl/oferty/sprzedaz/mieszkanie/zakopane?by=LATEST&direction=DESC"
             ],
-            "list_page_start_xpath": "//div[@class='col-md-content section-listing__row-content']//article[starts-with(@class,'offer-item ad')]",
+            "list_page_start_xpath": "//div[@data-cy='frontend.search.listing']//li",
             "list_page_iter_xpaths": {
-                  "url": "@data-url",
-                  "offeror":"//li[contains(@class,'pull-right\n')]/text()"
+                  "url": "a/@href",
+                  "offeror":"a/article/div/p[1]//text()"
             },
             "next_page_css": "li.pager-next a::attr(href)",
             "article_page_iter_xpaths": {

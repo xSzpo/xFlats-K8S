@@ -1,5 +1,5 @@
-#docker build -t xszpo/flat_scraper:1.0.20 .
-#docker push xszpo/flat_scraper:1.0.20
+#docker build -t xszpo/flat_scraper:1.0.21 .
+#docker push xszpo/flat_scraper:1.0.21
 
 FROM python:3.7-slim
 

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: scraper-flats
-        image: xszpo/flat_scraper:1.0.20
+        image: xszpo/flat_scraper:1.0.21
         env:
         - name: SCRAPER_CRAWLER_NAME
           value: 'otodom, olx, gratka'
@@ -25,7 +25,7 @@ spec:
         - name: GCP_FIRESTORE_COLLECTION
           value: flats
         - name: SCRAPER_CRAWL_LIST_PAGES
-          value: '100'
+          value: '2'
         envFrom:
           - configMapRef:
               name: env-config
@@ -75,9 +75,9 @@ spec:
         - name: LUIGI_DAYSBACK
           value: '15'
         - name: LUIGI_BUCKET
-          value: 'gs://gentle-current-314616-flats/'
+          value: 'gs://prefab-gift-324314-flats/'
         - name: LUIGI_BUCKET_PLOTS
-          value: 'gs://gentle-current-314616-plots/'
+          value: 'gs://prefab-gift-324314-plots/'
         envFrom:
           - configMapRef:
               name: env-config-luigi
@@ -122,13 +122,13 @@ spec:
       volumes:
       - name: gcpfirestore
         secret:
-          secretName: gcp-firestore-6765d52h6m
+          secretName: gcp-firestore-fk97dk9tdb
       - name: gcs
         secret:
-            secretName: gcp-gcs-28t8b84bgb
+            secretName: gcp-gcs-886c4mfc7m
       - name: telegram
         secret:
-            secretName: telegram-5bb96t2mf8
+            secretName: telegram-ftgm8f6k82
       - name: pv-volume-scraper-storage
         persistentVolumeClaim:
           claimName: pv-gcp-scraper-claim

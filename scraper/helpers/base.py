@@ -21,7 +21,7 @@ class PoliteLogFormatter(logformatter.LogFormatter):
         if '_id' in item.keys():
             return {
                 'level': logging.INFO,
-                'msg': u"Dropped item %s" % item['_id'],
+                'msg': u"Dropped item %s, %s" % (item['_id'],item['url']),
                 'args': {
                     'exception': exception,
                     'item': item,
@@ -187,13 +187,13 @@ class Geodata:
     @staticmethod
     def get_geodata_otodom(content):
 
-        pattern = "latitude.:(5\d.\d+),.longitude.:(2\d.\d+)"
+        pattern = "latitude.:(\d\d.\d+),.longitude.:(\d\d.\d+)"
         if re.search(pattern, content.decode("utf-8")):
             geocoordinates = dict()
             geocoordinates['latitude'] = Scraper.searchregex(
-                content.decode("utf-8"),"latitude.:(5\d.\d+),.longitude.:(2\d.\d+)", group=1)
+                content.decode("utf-8"),"latitude.:(\d\d.\d+)", group=1)
             geocoordinates['longitude'] = Scraper.searchregex(
-                content.decode("utf-8"),"latitude.:(5\d.\d+),.longitude.:(2\d.\d+)", group=2)
+                content.decode("utf-8"),"longitude.:(\d\d.\d+)", group=1)
             return geocoordinates
         else:
             return dict()

@@ -1,4 +1,4 @@
-project_id = "gentle-current-314616"
+project_id = "prefab-gift-324314"
 sa_name    = "terraform-sa"
 region     = "europe-central2"
 gcs_region = "EUROPE-CENTRAL2"
