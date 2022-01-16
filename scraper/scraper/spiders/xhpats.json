@@ -1,13 +1,12 @@
 {
       "otodom": {
             "start_urls": [
-                  "https://www.otodom.pl/pl/oferty/sprzedaz/mieszkanie/warszawa?by=LATEST&direction=DESC",
-                  "https://www.otodom.pl/pl/oferty/sprzedaz/mieszkanie/zakopane?by=LATEST&direction=DESC"
+                  "https://www.otodom.pl/pl/oferty/sprzedaz/mieszkanie/warszawa",
+                  "https://www.otodom.pl/pl/oferty/sprzedaz/mieszkanie/zakopane"
             ],
-            "list_page_start_xpath": "//div[@data-cy='frontend.search.listing']//li",
+            "list_page_start_xpath": "//div[@data-cy='search.listing']//li",
             "list_page_iter_xpaths": {
-                  "url": "a/@href",
-                  "offeror":"a/article/div/p[1]//text()"
+                  "url": "a[@data-cy='listing-item-link']/@href"
             },
             "next_page_css": "li.pager-next a::attr(href)",
             "article_page_iter_xpaths": {
@@ -25,7 +24,9 @@
                   "building_material": "//div[@title='Materiał budynku']/following::div[1]/text()",
                   "year_of_building": "//div[@title='Rok budowy']/following::div[1]/text()",
                   "property_form": "//div[@title='Forma własności']/following::div[1]/text()",
-                  "additional_info":"//h2[contains(.,'Informacje dodatkowe')]/following::ul[1]//li//text()"
+                  "additional_info":"//h2[contains(.,'Szczegóły ogłoszenia')]/following::div[1]/div//div//text()",
+                  "additional_info2":"//div[@role='region' and  contains(@aria-label,'')]/div//text()"
+                  
             }
       },
       "olx": {
@@ -37,8 +38,8 @@
             "next_page_css": "span.fbold.next.abs.large a::attr(href)",
             "article_page_iter_xpaths": {
                   "tracking_id": "//span[contains(@class, 'css-9xy3gn-Text')]//text()[2]",
-                  "price": "//h3[contains(@class,'css-8kqr5l-Text')]//text()[1]",
-                  "name": "//h1[contains(@class,'css-1oarkq2-Text')]//text()",
+                  "price": "//div[@data-testid='ad-price-container']/h3/text()[1]",
+                  "name": "//h1[@data-cy='ad_title']/text()",
                   "flat_size": "//ul[@class='css-sfcl1s']//p[contains(text(),'Powierzchnia')]//text()",
                   "rooms": "//ul[@class='css-sfcl1s']//p[contains(text(),'Liczba pokoi')]//text()",
                   "floor": "//ul[@class='css-sfcl1s']//p[contains(text(),'Poziom')]//text()",
@@ -46,7 +47,7 @@
                   "market": "//ul[@class='css-sfcl1s']//p[contains(text(),'Rynek')]//text()",
                   "building_type": "//ul[@class='css-sfcl1s']//p[contains(text(),'Rodzaj zabudowy')]//text()",
                   "description": "//div[@class='css-g5mtbi-Text']//text()[normalize-space()]",
-                  "additional_info": "//ul[@class='css-sfcl1s']//text()"
+                  "additional_info": "//ul[@class='css-sfcl1s']//li//p//text()"
             }
       },
       "gratka": {"start_urls": [
@@ -182,10 +183,10 @@
             "start_urls": [
                   "https://www.otodom.pl/sprzedaz/dzialka/?search%5Border%5D=created_at_first%3Adesc"
             ],
-            "list_page_start_xpath": "//div[@class='col-md-content section-listing__row-content']//article[starts-with(@class,'offer-item ad')]",
+            "list_page_start_xpath": "//div[@data-cy='frontend.search.listing']//li",
             "list_page_iter_xpaths": {
-                  "url": "@data-url",
-                  "offeror":"//li[contains(@class,'pull-right\n')]/text()"
+                  "url": "a/@href",
+                  "offeror":"a/article/div/p[1]//text()"
             },
             "next_page_css": "li.pager-next a::attr(href)",
             "article_page_iter_xpaths": {

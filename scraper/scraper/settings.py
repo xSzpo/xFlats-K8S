@@ -18,8 +18,8 @@ NEWSPIDER_MODULE = 'scraper.spiders'
 LOG_LEVEL = 'INFO'
 LOG_FORMATTER = 'helpers.base.PoliteLogFormatter'
 FEED_EXPORT_ENCODING = "UTF-8"
-LOCAL_SECRETS = "/Users/danielszponar/GoogleDrive/01_Projects/202003_xFlats_K8S/secrets"
-
+#LOCAL_SECRETS = "/Users/dsz/gdrive-priv/My Drive/01_Projects/202003_xFlats_K8S/secrets"
+LOCAL_SECRETS = "/scraper/secrets"
 
 ################
 # CRAWL SETTINGS
@@ -65,7 +65,8 @@ FIRESTORE_STR2DATE = ['download_date', 'date_created', 'date_modified']
 
 # local
 
-LOCAL_FILE_DIR = "/Users/danielszponar/GoogleDrive/01_Projects/202003_xFlats_K8S/scraper/data/"
+#LOCAL_FILE_DIR = "/Users/danielszponar/GoogleDrive/01_Projects/202003_xFlats_K8S/scraper/data/"
+LOCAL_FILE_DIR = "/scraper/data"
 LOCAL_FILE_NAME = "data_nok8s_plot"
 ADDDATE2NAME = True
 

@@ -6,6 +6,7 @@ import re
 import zlib
 import base64
 import unidecode
+import numpy as np
 from scrapy.exceptions import DropItem
 from dateutil.parser import parse
 from helpers.base import Scraper
@@ -41,12 +42,16 @@ class SpiderFlatOtodom(scrapy.Spider):
             url = offer.xpath(self.list_page_iter_xpaths['url']).get()
             if url:
                 url = 'https://www.otodom.pl'+url
-                offeror = offer.xpath(self.list_page_iter_xpaths['offeror']).getall()[-1]
-                yield scrapy.Request(url, callback=self.parse_dir_contents,
-                                        cb_kwargs=dict(offeror=offeror))
+                yield scrapy.Request(url, callback=self.parse_dir_contents)
 
         # after you crawl each offer in current page go to the next page
-        next_page = response.css(self.next_page_css).get()
+        reg = r"/?page=(\d+)"
+        match = re.search(reg, response.url)
+        if match:
+            page_num = int(match.group(1))
+            next_page = response.url+f'?page={page_num+1}'
+        else:
+            next_page = response.url+'?page=2'
 
         if next_page is not None and self.pageCounter < \
                 self.settings['CRAWL_LIST_PAGES']:
@@ -56,15 +61,33 @@ class SpiderFlatOtodom(scrapy.Spider):
             self.pageCounter += 1
             yield response.follow(next_page, callback=self.parse)
 
-    def parse_dir_contents(self, response, offeror):
+    def parse_dir_contents(self, response):
 
         tmp = {}
 
         for key in self.article_page_iter_xpaths:
             tmp[key] = response.xpath(self.article_page_iter_xpaths[key]).get()
 
-        tmp['additional_info'] = " ".join(response.xpath(
-            self.article_page_iter_xpaths['additional_info']).getall())
+        #tmp['additional_info'] = " | ".join(
+        #    response.xpath(self.article_page_iter_xpaths['additional_info']).getall()
+        #    )
+        _tmp1  = response.xpath(self.article_page_iter_xpaths['additional_info']).getall()
+        _tmp2  = response.xpath(self.article_page_iter_xpaths['additional_info2']).getall()
+
+        if len(_tmp1)>0:
+            tmp['additional_info']  = "|".join([" ".join(list(i)) for i in np.reshape(_tmp1, (-1, 3))])
+        else:
+            tmp['additional_info'] = ""
+
+        if len(_tmp2)>0:
+            tmp['additional_info2']  = "|".join([" ".join(list(i)) for i in np.reshape(response.xpath(self.article_page_iter_xpaths['additional_info2']).getall(), (-1, 3))])
+        else:
+            tmp['additional_info'] = ""
+        
+        tmp['additional_info'] = tmp['additional_info']+"|"+tmp['additional_info2']
+
+        tmp.pop('additional_info2')
+
         tmp['description'] = "\n".join(response.xpath(
             self.article_page_iter_xpaths['description']).getall())
 
@@ -85,8 +108,8 @@ class SpiderFlatOtodom(scrapy.Spider):
         tmp['producer_name'] = self.name
         tmp['main_url'] = self.start_urls[0]
         # zlib.decompress(base64.b64decode(x))
-        tmp['body'] = base64.b64encode(zlib.compress(response.body)).decode()
-        tmp['offeror'] = offeror
+        #tmp['body'] = base64.b64encode(zlib.compress(response.body)).decode()
+        #tmp['offeror'] = offeror
         #_tmp = tmp.copy()
         #_tmp.pop('body')
         #_tmp.pop('description')
@@ -138,15 +161,17 @@ class SpiderFlatOlx(scrapy.Spider):
         for key in self.article_page_iter_xpaths:
             tmp[key] = response.xpath(self.article_page_iter_xpaths[key]).get()
 
-        tmp['additional_info'] = re.sub(r"\W+", " ", " ".join(response.xpath(
-            self.article_page_iter_xpaths['additional_info']).getall()).strip())
+        tmp['additional_info'] = "|".join(response.xpath(
+            self.article_page_iter_xpaths['additional_info']).getall()).strip()
         tmp['description'] = "\n".join(response.xpath(
             self.article_page_iter_xpaths['description']).getall())
         tmp['geo_coordinates'] = Geodata.get_geodata_olx(response.body)
 
-        tmp['date_created'] = None
+        tmp['date_created'] = Scraper.searchregex(
+            response.body.decode("utf-8"), r'createdTime\W+(\d{4}-\d{2}-\d{2})', group=1)
+
         tmp['date_modified'] = Scraper.searchregex(
-            response.body.decode("utf-8"), r'.lastRefreshTime...(\d{4}-\d{2}-\d{2})', group=1)
+            response.body.decode("utf-8"), r'lastRefreshTime\W+(\d{4}-\d{2}-\d{2})', group=1)
 
         tmp['url'] = response.url
         tmp['producer_name'] = self.name
@@ -161,11 +186,10 @@ class SpiderFlatOlx(scrapy.Spider):
         tmp['year_of_building'] = Scraper.searchregex(
             tmp['description'].lower(), reg, group=2)
 
-        tmp['location'] = Scraper.searchregex(unidecode.unidecode(response.body.decode("utf-8")), 
-            r'"pathName":"([a-zA-Z, ]+)"}', group=1)
+        tmp['location'] = Scraper.searchregex(unidecode.unidecode(response.body.decode("utf-8")), r"pathName\W+([A-z,\s]+)", group=1).replace('\\','')
 
         #zlib.decompress(base64.b64decode(x))
-        tmp['body'] = base64.b64encode(zlib.compress(response.body)).decode()
+        #tmp['body'] = base64.b64encode(zlib.compress(response.body)).decode()
 
         tmp['building_material'] = None
 

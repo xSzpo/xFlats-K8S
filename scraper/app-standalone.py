@@ -32,25 +32,19 @@ def scraper(event={}, context={}):
     _, _ = event, context
 
     settings = get_project_settings()
-    settings['REDIS_HOST'] = os.getenv('REDIS_HOST', 'localhost')
+    settings['REDIS_HOST'] = os.getenv('REDIS_HOST', 'redis')
     settings['REDIS_PORT'] = int(os.getenv('REDIS_PORT', '6379'))
     settings['REDIS_DB_INDEX'] = int(os.getenv('REDIS_DB_INDEX', '0'))
 
-    # GCP Firestore
-    settings['COLLECTION'] = os.getenv("GCP_FIRESTORE_COLLECTION", "flats")
-    settings['SECRETS_PATH'] = os.getenv("GCP_FIRESTORE_SECRETS_PATH",
-            "~/GoogleDrive/01_Projects/202003_xFlats_K8S/secrets/gcpfirestore_key.json")
-
     # local
-    settings['LOCAL_FILE_DIR'] = os.getenv("JSONLINE_FILE_DIR",
-            "~/GoogleDrive/01_Projects/202003_xFlats_K8S/scraper/data/")
+    settings['LOCAL_FILE_DIR'] = os.getenv("JSONLINE_FILE_DIR","/data")
     settings['LOCAL_FILE_NAME'] = os.getenv("JSONLINE_FILE_NAME", "data_flats")
     settings['ADDDATE2NAME'] = bool(os.getenv("JSONLINE_ADDDATE2NAME",
                                               "True") == "True")
 
     # telegram
     settings['TELEGRAM_KEY_PATH'] = os.getenv('TELEGRAM_KEY_PATH',
-        "~/GoogleDrive/01_Projects/202003_xFlats_K8S/secrets/telegram_key.json")
+        "/app/secrets/telegram_key.json")
     settings['TELEGRAM_FLATS_KEYWORDS'] = os.getenv('TELEGRAM_FLATS_KEYWORDS', "")
     settings['TELEGRAM_FLATS_QUERY'] = os.getenv('TELEGRAM_FLATS_QUERY', "")
     settings['TELEGRAM_PLOTS_KEYWORDS'] = os.getenv('TELEGRAM_PLOTS_KEYWORDS', "rzek|rzec|lini\w+\W+brzeg|jezio")
@@ -117,8 +111,8 @@ def scraper(event={}, context={}):
         deferred.addCallback(_crawl, spider)
         return deferred
 
-    #spiders = os.getenv("SCRAPER_CRAWLER_NAME", "olx, otodom, gratka, morizon")
-    spiders = os.getenv("SCRAPER_CRAWLER_NAME", "plot_sprzedajemy, plot_gumtree")
+    spiders = os.getenv("SCRAPER_CRAWLER_NAME", "olx, otodom, gratka, morizon")
+    #spiders = os.getenv("SCRAPER_CRAWLER_NAME", "plot_sprzedajemy, plot_gumtree")
 
     for spider_name in [i.strip() for i in spiders.split(",")]:
         _crawl(None, spider_name)

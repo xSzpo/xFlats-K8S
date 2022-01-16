@@ -125,6 +125,8 @@ class Scraper:
                 return int(11)
             elif x == 'poddasze':
                 return None
+            elif type(x) == str:
+                return Scraper.digits_from_str(x)
             else:
                 return None
         else:
@@ -201,30 +203,29 @@ class Geodata:
     @staticmethod
     def get_geodata_olx(content):
 
-        pattern = '{.zoom..\d+,.lat..\d{2}.\d+..lon..\d{2}.\d+..radius'
-        if re.search(pattern, content.decode("utf-8")):
-            data_lat = re.findall("lat..\d{2}.\d+.", content.decode("utf-8"))[0]
-            data_lat = "".join([i for i in data_lat if i.isdigit() or i == "."])
-            data_lon = re.findall("lon..\d{2}.\d+", content.decode("utf-8"))[0]
-            data_lon = "".join([i for i in data_lon if i.isdigit() or i == "."])
+        pattern = r'{\W+zoom\W+\d+\W+lat\W+(\d+.\d+)\W+lon\W+(\d+.\d+)'
+        match = re.search(pattern, content.decode("utf-8"))
+        if match:
+            data_lat = float(match.group(1))
+            data_lon = float(match.group(2))
             geocoordinates = {"latitude": data_lat, "longitude": data_lon}
             return geocoordinates
         else:
             return dict()
 
-    @staticmethod
-    def get_geodata_gratka(content):
+        @staticmethod
+        def get_geodata_gratka(content):
 
-        pattern = "szerokosc-geograficzna-y..[\d]{2}\\.[\d]+"
-        if re.search(pattern, content.decode("utf-8")):
-            data_lat = re.findall("szerokosc-geograficzna-y..[\d]{2}\\.[\d]+", content.decode("utf-8"))[0]
-            data_lat = "".join([i for i in data_lat if i.isdigit() or i == "."])
-            data_lon = re.findall("dlugosc-geograficzna-x..[\d]{2}\\.[\d]+", content.decode("utf-8"))[0]
-            data_lon = "".join([i for i in data_lon if i.isdigit() or i == "."])
-            geocoordinates = {"latitude": data_lat, "longitude": data_lon}
-            return geocoordinates
-        else:
-            return dict()
+            pattern = "szerokosc-geograficzna-y..[\d]{2}\\.[\d]+"
+            if re.search(pattern, content.decode("utf-8")):
+                data_lat = re.findall("szerokosc-geograficzna-y..[\d]{2}\\.[\d]+", content.decode("utf-8"))[0]
+                data_lat = "".join([i for i in data_lat if i.isdigit() or i == "."])
+                data_lon = re.findall("dlugosc-geograficzna-x..[\d]{2}\\.[\d]+", content.decode("utf-8"))[0]
+                data_lon = "".join([i for i in data_lon if i.isdigit() or i == "."])
+                geocoordinates = {"latitude": data_lat, "longitude": data_lon}
+                return geocoordinates
+            else:
+                return dict()
 
     @staticmethod
     def get_geocode_openstreet(geocoordinates):
