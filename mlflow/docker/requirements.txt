@@ -1,4 +1,4 @@
-mlflow==1.8.0
+mlflow==1.23.1
 pandas==1.0.3
 numpy==1.18.3
 category-encoders==2.1.0
